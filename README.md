@@ -1,5 +1,7 @@
 <div align="center">
 
+<img src="docs/images/notification-center-title.svg" alt="MGD Notification Center – Benachrichtigungen für WordPress" width="100%">
+
 # MGD Notification Center
 
 **Öffentliche Neuigkeiten und persönliche Benachrichtigungen für WordPress.**
@@ -31,7 +33,7 @@ MGD Notification Center bringt eine zugängliche Glocke in WordPress. Sie zeigt 
 
 ## Installation
 
-1. Lade [**MGD Notification Center 0.1.0**](https://github.com/MichaelGahnDESIGN/MGD-Notification-WordPress/releases/download/v0.1.0/mgd-notification-center-0.1.0.zip) herunter.
+1. Lade [**MGD Notification Center 0.1.1**](https://github.com/MichaelGahnDESIGN/MGD-Notification-WordPress/releases/download/v0.1.1/mgd-notification-center-0.1.1.zip) herunter.
 2. Öffne in WordPress **Plugins → Installieren → Plugin hochladen**.
 3. Wähle die ZIP-Datei, installiere sie und aktiviere das Plugin.
 4. Stelle unter **Notification Center → Einstellungen** die gewünschte Position ein.
