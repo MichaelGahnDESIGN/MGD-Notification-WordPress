@@ -100,6 +100,52 @@ final class MGD_Notification_Repository {
 
     public function mark_read( int $notification_id, int $user_id ): bool {
         global $wpdb;
-        return false !== $wpdb->update( $this->recipients_table, array( 'read_at' => current_time( 'mysql', true ) ), array( 'notification_id' => $notification_id, 'user_id' => $user_id ), array( '%s' ), array( '%d', '%d' ) );
+        return 0 < (int) $wpdb->update( $this->recipients_table, array( 'read_at' => current_time( 'mysql', true ) ), array( 'notification_id' => $notification_id, 'user_id' => $user_id ), array( '%s' ), array( '%d', '%d' ) );
+    }
+
+    /** Liefert nur Verwaltungsdaten; persönliche Empfänger werden nie an das öffentliche Frontend gegeben. */
+    public function get_for_admin( int $notification_id ): ?array {
+        global $wpdb;
+        $item = $wpdb->get_row( $wpdb->prepare( "SELECT n.*, GROUP_CONCAT(r.user_id ORDER BY r.user_id) AS recipient_ids FROM {$this->notifications_table} n LEFT JOIN {$this->recipients_table} r ON r.notification_id = n.id WHERE n.id = %d GROUP BY n.id", $notification_id ), ARRAY_A );
+        return is_array( $item ) ? $item : null;
+    }
+
+    public function list_for_admin(): array {
+        global $wpdb;
+        return $wpdb->get_results( "SELECT id, scope, title, status, published_at, updated_at FROM {$this->notifications_table} ORDER BY updated_at DESC LIMIT 100", ARRAY_A );
+    }
+
+    /** Aktualisiert eine manuelle Meldung und ersetzt deren Empfängerliste atomar innerhalb derselben Anfrage. */
+    public function update_manual( int $notification_id, array $input, array $recipient_ids = array() ): bool {
+        global $wpdb;
+        $existing = $this->get_for_admin( $notification_id );
+        if ( ! $existing ) {
+            return false;
+        }
+        $scope = in_array( $input['scope'] ?? '', array( 'public', 'personal' ), true ) ? $input['scope'] : 'public';
+        $status = in_array( $input['status'] ?? '', array( 'draft', 'scheduled', 'published', 'archived' ), true ) ? $input['status'] : 'draft';
+        $published_at = ! empty( $input['published_at'] ) ? gmdate( 'Y-m-d H:i:s', strtotime( $input['published_at'] ) ) : ( 'published' === $status ? ( $existing['published_at'] ?: current_time( 'mysql', true ) ) : null );
+        $updated = $wpdb->update( $this->notifications_table, array(
+            'scope' => $scope,
+            'title' => sanitize_text_field( $input['title'] ?? '' ),
+            'message' => wp_kses_post( $input['message'] ?? '' ),
+            'target_url' => esc_url_raw( $input['target_url'] ?? '' ),
+            'status' => $status,
+            'published_at' => $published_at,
+            'updated_at' => current_time( 'mysql', true ),
+        ), array( 'id' => $notification_id ) );
+        if ( false === $updated ) {
+            return false;
+        }
+        $wpdb->delete( $this->recipients_table, array( 'notification_id' => $notification_id ), array( '%d' ) );
+        if ( 'personal' === $scope ) {
+            $now = current_time( 'mysql', true );
+            foreach ( array_unique( array_map( 'absint', $recipient_ids ) ) as $user_id ) {
+                if ( $user_id > 0 && get_user_by( 'id', $user_id ) ) {
+                    $wpdb->query( $wpdb->prepare( "INSERT IGNORE INTO {$this->recipients_table} (notification_id, user_id, created_at) VALUES (%d, %d, %s)", $notification_id, $user_id, $now ) );
+                }
+            }
+        }
+        return true;
     }
 }

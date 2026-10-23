@@ -16,7 +16,7 @@ für angemeldete Konten. Das Plugin lädt keine externen Schriften, Skripte oder
 
 1. Den Ordner `mgd-notification-center` als ZIP paketieren und in WordPress installieren.
 2. Unter **Notification Center → Einstellungen** die gewünschte Platzierung einstellen.
-3. Unter **Notification Center → Meldungen** öffentliche oder persönliche Meldungen erstellen.
+3. Unter **Notification Center → Meldungen** öffentliche oder persönliche Meldungen erstellen, bearbeiten, archivieren und veröffentlichen.
 4. Vor einer produktiven Installation Datenbank und Dateien sichern und die Ausgabe ausgeloggt sowie mit einem Testkonto prüfen.
 
 ```bash
