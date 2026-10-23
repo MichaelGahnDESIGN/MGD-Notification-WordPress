@@ -1,6 +1,6 @@
 {
   "runtime": "mgd-notification-center",
   "main": "mgd-notification-center.php",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "slug": "mgd-notification-center"
 }
