@@ -14,7 +14,9 @@ jobs:
         with:
           php-version: '8.1'
       - name: Katalog-Paketvertrag
-        run: php tests/catalog-package.php
+        run: |
+          php tests/catalog-package.php
+          php tests/catalog-update-state.php
       - name: PHP und JavaScript prüfen
         run: |
           python3 - <<'PY'

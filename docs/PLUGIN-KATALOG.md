@@ -33,3 +33,7 @@ Browserprüfung: Suche, Kategorien, Status und Preise, Nulltreffer mit Rücksetz
 Paketvertrag, PHP-/JavaScript-Syntax und Secret-Scan des neuen Katalogcodes bestanden. Die 14 gemeinsamen Laufzeitdateien sind in allen vier Projekten identisch. Vorschau-ZIPs werden separat mit SHA-256 gebaut. Die Screenshots zeigen Testdaten, keine produktive Installation und keine echten Versionsangebote.
 
 Diese Umsetzung gehört zur GitHub-Version 0.1.3. Die WordPress.org-Kandidaten bleiben getrennt; es wird keine Kundenwebsite direkt installiert oder verändert. Die Prüfung fand vor der Veröffentlichung in der isolierten Testinstallation statt.
+
+## Nachprüfung des WordPress-Updatecaches
+
+Nach einem echten Update kann WordPress noch ein altes Angebot im Update-Transient halten. Seit Version 0.1.4 bietet die Karte nur dann eine Aktualisierung an, wenn die angebotene Version tatsächlich neuer als die installierte ist. Gleiche oder ältere Angebote sowie fehlende Angaben werden ausgeblendet. Sieben Regressionstests decken gleiche, ältere, neuere Patch-/Minorversionen, leere/fehlende Werte und fehlende Rechte ab.
