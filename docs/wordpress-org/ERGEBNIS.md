@@ -1,22 +1,15 @@
-# Plugin Check – aktualisierter lokaler Lauf
+# Plugin Check – nachgezogene Warnungen
 
-Stand: 23.10.2026. Kandidat 0.1.4; WordPress 7.1.3, PHP 8.3, offizieller Plugin Check 2.1.0 mit Runtime-Bootstrap.
+Kandidat 0.1.4. Lokaler offizieller Plugin Check 2.1.0 auf WordPress 7.1.3/PHP 8.3 mit Runtime-Bootstrap: **0 Fehler, 0 statische Warnungen**. Der vollständige lokale Bericht steht in `plugin-check.txt`. Der zusätzliche wp-env-Lauf in GitHub Actions kann funktional notwendige Enqueue-Scope-Hinweise ausgeben; sein vollständiger Bericht gehört zur Paketübergabe.
 
-**0 Fehler, 28 Warnungen.** Alle Prüfgruppen aktiv, keine Fehlercodes ausgeschlossen. Vollständiger Bericht: `plugin-check.txt`.
+## Tatsächliche Änderungen
 
-- `WordPress.DB.DirectDatabaseQuery.DirectQuery`: 13
-- `WordPress.DB.DirectDatabaseQuery.NoCaching`: 12
-- `WordPress.DB.DirectDatabaseQuery.SchemaChange`: 2
-- `WordPress.Security.NonceVerification.Recommended`: 1
+Wiederholte Feed- und Verwaltungsabfragen verwenden den WordPress Object Cache ausschließlich für die laufende Anfrage. Die Cache-Gruppe ist ausdrücklich nicht persistent; Schlüssel enthalten Zweck, Tabelle und Empfänger bzw. Meldungs-ID. Schreibaktionen invalidieren alle bereits gelesenen Anfrageansichten. Zeitabhängige Feeds berücksichtigen die aktuelle Sekunde, damit Terminierung und Ablauf nicht über eine Zeitgrenze hinweg veraltet bleiben. Eigene Tabellen brauchen weiter vorbereitete Direktabfragen; dafür gibt es einzelne begründete Code-Ausnahmen.
 
-Die CI läuft zusätzlich mit einer eigenen wp-env-Installation und kann andere Laufzeit-/Performance-Hinweise liefern. Die Gesamtübergabe bewahrt beide Rohberichte getrennt auf. Ein grüner Lauf ist keine WordPress.org-Zulassung.
+## Umgang mit Prüfregeln
 
-## Prüfung der Resthinweise
+Keine Prüfgruppe und kein Laufzeitcheck wird ausgeschaltet. Technisch notwendige Direktabfragen, rein lesende URL-Auswahl, signierte öffentliche Tokens und die feste Cache-Konstante sind nach Einzelprüfung mit dem jeweils engsten PHPCS-Code und einer Begründung an der konkreten Stelle gekennzeichnet. Diese statischen Einzel-Ausnahmen sind **keine zusätzlichen Sicherheitsprüfungen** und werden ausdrücklich offengelegt. Verzeichnis: `GEPRUEFTE-AUSNAHMEN.md`. Keine Zusage einer WordPress.org-Zulassung.
 
-Eigene Plugin-Tabellen werden über das WordPress-Präfix und feste Namen erzeugt. Die Laufzeitabfragen binden Tabellenbezeichner mit `%i` und Werte mit `%s`/`%d`. Direkte Abfragen bleiben für eigene Tabellen notwendig. Ein Cache für Empfänger-, Lese-, Audit- und Downloadstatus wurde nicht ergänzt: Änderungen müssen unmittelbar sichtbar bleiben. Hinweise zu Schemaänderungen gehören zur Installation bzw. ausdrücklich gewählten Datenlöschung. Die SQL-Änderungen wurden mit echten Datenbankzugriffen in der lokalen Testkopie geprüft.
+## Nachweise
 
-Der empfohlene Nonce-Hinweis betrifft das rein lesende Öffnen einer vorhandenen Meldung zur Bearbeitung. Das Speichern besitzt eine eigene Nonce- und Capability-Prüfung. Empfängerdaten werden aus dem öffentlichen Feed ausgeschlossen; dies ist mit zwei unterschiedlichen Zugriffswegen getestet.
-
-## Weitere Belege
-
-Sieben Backends tatsächlich im Browser geöffnet, keine JavaScript-Ausnahmen; echte Screenshots mit künstlichen Daten. 22 lokale Integrationstests zu Formularschutz, Herstellerlink, Entwurf, Menü und privaten/öffentlichen Daten. PHP-Syntax und Verzeichnis-Paketvertrag geprüft. Kein Produktivsystem verändert und keine Einreichung ausgelöst.
+41 Integrationstests bestanden: ursprüngliche 22 Schutzgrenzen-/Datenprüfungen plus 19 Cache-, Invalidierungs-, Empfänger- und AI-Seiten-ID-Prüfungen. Browser: keine Giveaway-Ressourcen ohne Formular, normale und nach wp_head gerenderte Shortcodes, Modal/Escape, 390px sowie echter CSV-Multipart-Import. Ungültige Upload-Nonce und falsche Endung werden abgewiesen. PHP-Syntax aller 86 Laufzeitdateien unter PHP 8.1 und der 15 MCP-Dateien zusätzlich unter PHP 7.4 geprüft. Keine produktiven Daten, keine Live-Einreichung.

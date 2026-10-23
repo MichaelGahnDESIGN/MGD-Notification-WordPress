@@ -18,6 +18,7 @@ final class MGD_Notification_Admin {
 
     public function notifications_page(): void {
         if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Nicht berechtigt.', 'mgd-notification-center' ) ); }
+        // phpcs:ignore WordPress.Security.NonceVerification.Recommended -- Nur lesender Editor-Aufruf nach manage_options; Speichern besitzt eine eigene Nonce.
         $edit_id = absint( $_GET['edit'] ?? 0 );
         $item = $edit_id ? $this->repository->get_for_admin( $edit_id ) : null;
         $item = $item ?: array( 'id' => 0, 'title' => '', 'message' => '', 'target_url' => '', 'scope' => 'public', 'status' => 'draft', 'published_at' => '', 'recipient_ids' => '' );
