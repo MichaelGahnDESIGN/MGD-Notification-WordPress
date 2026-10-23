@@ -9,7 +9,7 @@ final class MGD_Notification_Admin {
         add_action( 'admin_menu', array( $this, 'menu' ) );
         add_action( 'admin_post_mgd_notification_save', array( $this, 'save' ) );
         add_action( 'add_meta_boxes', array( $this, 'meta_box' ) );
-        ( new MGD_WordPress_Plugin_Catalog() )->register( 'mgd-notification-center' );
+        ( new MGD_WordPress_Plugin_Catalog_V3() )->register( 'mgd-notification-center' );
     }
 
     public function menu(): void {
