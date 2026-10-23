@@ -4,7 +4,7 @@ Tags: notifications, announcements
 Requires at least: 6.5
 Tested up to: 7.1
 Requires PHP: 8.1
-Stable tag: 0.1.2
+Stable tag: 0.1.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -41,12 +41,16 @@ WordPress checks the official directory. This edition has no configurable update
 = Does it send analytics? =
 No analytics or telemetry service is included. WordPress communicates with WordPress.org for native updates. Support links open only when clicked.
 
+== Screenshots ==
+
+1. Editor for public and personal notifications.
+
 == Changelog ==
 
-= 0.1.2 =
+= 0.1.4 =
 * Prepared a WordPress.org candidate with native updates, local assets and reviewed public credits.
 
 == Upgrade Notice ==
 
-= 0.1.2 =
+= 0.1.4 =
 Submission candidate. Do not activate alongside the GitHub edition. Back up the database before changing distribution channels.

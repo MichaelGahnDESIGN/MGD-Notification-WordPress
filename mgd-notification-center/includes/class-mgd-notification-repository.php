@@ -69,7 +69,7 @@ final class MGD_Notification_Repository {
         $id = (int) $wpdb->insert_id;
         foreach ( array_unique( array_map( 'absint', $recipient_ids ) ) as $user_id ) {
             if ( $user_id > 0 && get_user_by( 'id', $user_id ) ) {
-                $wpdb->query( $wpdb->prepare( "INSERT IGNORE INTO {$this->recipients_table} (notification_id, user_id, created_at) VALUES (%d, %d, %s)", $id, $user_id, $now ) );
+                $wpdb->query( $wpdb->prepare( "INSERT IGNORE INTO %i (notification_id, user_id, created_at) VALUES (%d, %d, %s)", $this->recipients_table, $id, $user_id, $now ) );
             }
         }
         return $id;
@@ -82,20 +82,20 @@ final class MGD_Notification_Repository {
         if ( '' === $source_key ) {
             return $this->create( $input, $recipients );
         }
-        $existing = (int) $wpdb->get_var( $wpdb->prepare( "SELECT id FROM {$this->notifications_table} WHERE source_key = %s", $source_key ) );
+        $existing = (int) $wpdb->get_var( $wpdb->prepare( "SELECT id FROM %i WHERE source_key = %s", $this->notifications_table, $source_key ) );
         return $existing ?: $this->create( $input, $recipients );
     }
 
     public function public_feed( int $limit = 8 ): array {
         global $wpdb;
         $now = current_time( 'mysql', true );
-        return $wpdb->get_results( $wpdb->prepare( "SELECT id, title, message, target_url, published_at FROM {$this->notifications_table} WHERE scope = 'public' AND status = 'published' AND published_at <= %s AND (expires_at IS NULL OR expires_at > %s) ORDER BY published_at DESC LIMIT %d", $now, $now, max( 1, min( 30, $limit ) ) ), ARRAY_A );
+        return $wpdb->get_results( $wpdb->prepare( "SELECT id, title, message, target_url, published_at FROM %i WHERE scope = 'public' AND status = 'published' AND published_at <= %s AND (expires_at IS NULL OR expires_at > %s) ORDER BY published_at DESC LIMIT %d", $this->notifications_table, $now, $now, max( 1, min( 30, $limit ) ) ), ARRAY_A );
     }
 
     public function personal_feed( int $user_id ): array {
         global $wpdb;
         $now = current_time( 'mysql', true );
-        return $wpdb->get_results( $wpdb->prepare( "SELECT n.id, n.title, n.message, n.target_url, n.published_at, r.read_at FROM {$this->notifications_table} n INNER JOIN {$this->recipients_table} r ON r.notification_id = n.id WHERE r.user_id = %d AND r.dismissed_at IS NULL AND n.scope = 'personal' AND n.status = 'published' AND n.published_at <= %s AND (n.expires_at IS NULL OR n.expires_at > %s) ORDER BY n.published_at DESC LIMIT 30", $user_id, $now, $now ), ARRAY_A );
+        return $wpdb->get_results( $wpdb->prepare( "SELECT n.id, n.title, n.message, n.target_url, n.published_at, r.read_at FROM %i n INNER JOIN %i r ON r.notification_id = n.id WHERE r.user_id = %d AND r.dismissed_at IS NULL AND n.scope = 'personal' AND n.status = 'published' AND n.published_at <= %s AND (n.expires_at IS NULL OR n.expires_at > %s) ORDER BY n.published_at DESC LIMIT 30", $this->notifications_table, $this->recipients_table, $user_id, $now, $now ), ARRAY_A );
     }
 
     public function mark_read( int $notification_id, int $user_id ): bool {
@@ -106,13 +106,13 @@ final class MGD_Notification_Repository {
     /** Liefert nur Verwaltungsdaten; persönliche Empfänger werden nie an das öffentliche Frontend gegeben. */
     public function get_for_admin( int $notification_id ): ?array {
         global $wpdb;
-        $item = $wpdb->get_row( $wpdb->prepare( "SELECT n.*, GROUP_CONCAT(r.user_id ORDER BY r.user_id) AS recipient_ids FROM {$this->notifications_table} n LEFT JOIN {$this->recipients_table} r ON r.notification_id = n.id WHERE n.id = %d GROUP BY n.id", $notification_id ), ARRAY_A );
+        $item = $wpdb->get_row( $wpdb->prepare( "SELECT n.*, GROUP_CONCAT(r.user_id ORDER BY r.user_id) AS recipient_ids FROM %i n LEFT JOIN %i r ON r.notification_id = n.id WHERE n.id = %d GROUP BY n.id", $this->notifications_table, $this->recipients_table, $notification_id ), ARRAY_A );
         return is_array( $item ) ? $item : null;
     }
 
     public function list_for_admin(): array {
         global $wpdb;
-        return $wpdb->get_results( "SELECT id, scope, title, status, published_at, updated_at FROM {$this->notifications_table} ORDER BY updated_at DESC LIMIT 100", ARRAY_A );
+        return $wpdb->get_results( $wpdb->prepare( 'SELECT id, scope, title, status, published_at, updated_at FROM %i ORDER BY updated_at DESC LIMIT 100', $this->notifications_table ), ARRAY_A );
     }
 
     /** Aktualisiert eine manuelle Meldung und ersetzt deren Empfängerliste atomar innerhalb derselben Anfrage. */
@@ -142,7 +142,7 @@ final class MGD_Notification_Repository {
             $now = current_time( 'mysql', true );
             foreach ( array_unique( array_map( 'absint', $recipient_ids ) ) as $user_id ) {
                 if ( $user_id > 0 && get_user_by( 'id', $user_id ) ) {
-                    $wpdb->query( $wpdb->prepare( "INSERT IGNORE INTO {$this->recipients_table} (notification_id, user_id, created_at) VALUES (%d, %d, %s)", $notification_id, $user_id, $now ) );
+                    $wpdb->query( $wpdb->prepare( "INSERT IGNORE INTO %i (notification_id, user_id, created_at) VALUES (%d, %d, %s)", $this->recipients_table, $notification_id, $user_id, $now ) );
                 }
             }
         }

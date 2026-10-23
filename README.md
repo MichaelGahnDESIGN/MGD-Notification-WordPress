@@ -1,5 +1,21 @@
 > **WordPress.org-Kandidat:** Dieser Branch verwendet native Verzeichnis-Updates. Paketbau, Prüfergebnisse und Wechselhinweise: [WordPress.org-Vorbereitung](docs/WORDPRESS-ORG.md). Die nachfolgende bisherige Dokumentation beschreibt auch die separate GitHub-Ausgabe.
 
+## Verzeichnisfassung 0.1.4
+
+![Plugin-Banner](wordpress-org/assets/banner-1544x500.png)
+
+Für das WordPress.org-Profil [michaelgahndesign](https://profiles.wordpress.org/michaelgahndesign/) vorbereitet. Vorgeschlagener Slug: `mgd-notification-center`; der endgültige Name wird bei der Aufnahme bestätigt.
+
+- [Einreichungs-Readme](mgd-notification-center/readme.txt) mit Funktionen, Installation, Datenschutz und Screenshots.
+- [Prüfbericht](docs/wordpress-org/ERGEBNIS.md) mit Einordnung aller verbleibenden lokalen Plugin-Check-Hinweise.
+- [Paketbau, Updatekanal und sicherer Wechsel](docs/WORDPRESS-ORG.md).
+
+`python3 scripts/build-wordpress-org.py` baut das installierbare ZIP mit Prüfsumme. `php tests/wordpress-org-contract.php` prüft Metadaten, Version, Grafiken und den nativen Updatekanal. Verzeichnisgrafiken und echte Backend-Screenshots liegen getrennt unter `wordpress-org/assets`; sie gehören später in den obersten SVN-assets-Ordner.
+
+**Noch nicht eingereicht oder von WordPress.org zugelassen.** Diese Fassung lädt keinen externen Plugin-Katalog und installiert keine GitHub-Updatepakete. Die unten folgende Projektdokumentation enthält zusätzlich die Geschichte und Bedienung der eigenständigen GitHub-Ausgabe auf main. Nicht beide Ausgaben gleichzeitig aktivieren.
+
+---
+
 <div align="center">
 
 <img src="docs/images/notification-center-title.svg" alt="MGD Notification Center – Benachrichtigungen für WordPress" width="100%">
@@ -110,6 +126,6 @@ Fehler, Wünsche und nachvollziehbare Verbesserungsvorschläge bitte als [GitHub
 
 Dieses Plugin steht unter [GPL-2.0-or-later](mgd-notification-center/LICENSE).
 
-## 0.1.2 – Plugin-Verwaltung
+## 0.1.4 – Plugin-Verwaltung
 
 Separate Update-Prüfung, Plugin-Links und ergänzte lokale Details. [Anleitung](docs/WORDPRESS-VERWALTUNG.md).
