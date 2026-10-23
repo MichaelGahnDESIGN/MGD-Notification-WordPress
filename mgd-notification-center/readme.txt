@@ -10,16 +10,16 @@ License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
 Manage public announcements and personal notifications in your own database.
 
+== Description ==
+
+Manage public announcements and personal notifications in your own database.
+
 Features:
 
 * Create public announcements or assign a personal notification to selected WordPress accounts.
 * Choose floating, menu, footer or shortcode placement.
 * Keep notification data and read/dismiss state in the site database.
 * Use WordPress permissions for administrative actions and authenticated personal feeds.
-
-== Description ==
-
-Manage public announcements and personal notifications in your own database.
 
 This edition uses native WordPress.org updates. There is no GitHub self-updater or external plugin installer. Updates become available after approval and publication in the directory.
 
