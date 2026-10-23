@@ -37,3 +37,13 @@ Diese Umsetzung gehört zur GitHub-Version 0.1.3. Die WordPress.org-Kandidaten b
 ## Nachprüfung des WordPress-Updatecaches
 
 Nach einem echten Update kann WordPress noch ein altes Angebot im Update-Transient halten. Seit Version 0.1.4 bietet die Karte nur dann eine Aktualisierung an, wenn die angebotene Version tatsächlich neuer als die installierte ist. Gleiche oder ältere Angebote sowie fehlende Angaben werden ausgeblendet. Sieben Regressionstests decken gleiche, ältere, neuere Patch-/Minorversionen, leere/fehlende Werte und fehlende Rechte ab.
+
+## Kartenmotive – 24.10.2026
+
+Jede der sieben bekannten Erweiterungen hat ein eigenes, zum Thema passendes Hintergrundbild. Die vorhandenen Icons bleiben unverändert. Motive: Fotografie, Designatelier, offene Wege, Verbindungen, Mitteilungen, Publikationen und Technik. Die Bildserie ist mit dem integrierten Imagegen-Werkzeug erzeugt; es werden keine fremden Stockbilder oder Marken verwendet. Die vollständigen Eingaben stehen in `KATALOG-BILDER-PROMPTS.json`. Die generierten Bilddateien werden als Teil des GPL-Plugin-Pakets mitgeliefert; dies ist keine Aussage über die urheberrechtliche Schutzfähigkeit rein generierter Bilder.
+
+Die sieben WebP-Dateien liegen lokal unter `assets/plugin-catalog/backgrounds/`, jeweils 1080×360 Pixel und höchstens 80 KB. Zusammen sind es rund 310 KB. Sie laden verzögert; es gibt keine externen Bildabrufe, eingebetteten Metadaten oder Animationen. Dekorative Bilder besitzen leere Alternativtexte. Kategorie und Versionsnummer stehen auf deckenden weißen Schildern. Bei erzwungenen Systemfarben werden die Hintergrundbilder ausgeblendet. Unbekannte Erweiterungen behalten eine farbige Ersatzfläche.
+
+Die Oberfläche verwendet die gemeinsame Klasse V4 und übersteuert alte V3-Ansichten samt deren Asset-Hook gezielt. Damit reicht bereits ein aktualisierter Katalog-Verbraucher für die neue Darstellung. Die Installations-, Update- und Berechtigungslogik bleibt erhalten. WordPress.org-Einreichungskandidaten enthalten weiterhin keinen externen Katalog.
+
+Bestanden: alle Motive im echten lokalen WordPress bei 1440×1100, 390×844 und 360×844 betrachtet; Darstellung mit älterem V3-Verbraucher zuerst, Bildausfall, Systemfarben, Suche, Dialog und axe geprüft (0 Verstöße). Paketprüfung kontrolliert Format, Abmessungen und Größe der sieben Motive. Rückfall: vorheriges GitHub-Release installieren; keine Datenbankänderung.

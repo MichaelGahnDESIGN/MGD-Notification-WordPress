@@ -2,7 +2,7 @@
 defined( 'ABSPATH' ) || exit;
 
 /** Öffentliche Metadaten im Cache; lokale Installation und Rechte immer frisch ermitteln. */
-final class MGD_Catalog_V3_Provider {
+final class MGD_Catalog_V4_Provider {
     private const OWNER = 'MichaelGahnDESIGN';
     private const FEED = 'https://theme.michael-gahn.de/api/catalog/plugins.json';
     private const CACHE = 'mgd_wordpress_catalog_v3';

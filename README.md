@@ -33,7 +33,7 @@ MGD Notification Center bringt eine zugängliche Glocke in WordPress. Sie zeigt 
 
 ## Installation
 
-1. Lade [**MGD Notification Center 0.1.1**](https://github.com/MichaelGahnDESIGN/MGD-Notification-WordPress/releases/download/v0.1.1/mgd-notification-center-0.1.1.zip) herunter.
+1. Lade [**MGD Notification Center 0.1.5**](https://github.com/MichaelGahnDESIGN/MGD-Notification-WordPress/releases/download/v0.1.5/mgd-notification-center-0.1.5.zip) herunter.
 2. Öffne in WordPress **Plugins → Installieren → Plugin hochladen**.
 3. Wähle die ZIP-Datei, installiere sie und aktiviere das Plugin.
 4. Stelle unter **Notification Center → Einstellungen** die gewünschte Position ein.
@@ -123,3 +123,7 @@ Die bisherige Empfehlungstabelle wird zur Plugin-Kollektion mit eigenen Icons, v
 ## 0.1.4 – Updateanzeige nach der Installation
 
 Die Übersicht vergleicht zwischengespeicherte WordPress-Updateangebote zusätzlich mit der tatsächlich installierten Version. Gleiche, ältere oder fehlende Versionsangaben zeigen keine erneute Updateaktion. Sieben Regressionstests sichern diesen Zustand und die Rechteprüfung ab.
+
+## 0.1.5 – Eigene Motive in der Plugin-Kollektion
+
+Sieben passende, lokal mitgelieferte Hintergrundbilder ergänzen die Plugin-Karten. Icons, Suche und Filter bleiben erhalten. [Gestaltung und Herkunft](docs/PLUGIN-KATALOG.md#kartenmotive--24102026).

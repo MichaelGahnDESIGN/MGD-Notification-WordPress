@@ -13,7 +13,7 @@ function self_admin_url($value) { return 'https://example.test/wp-admin/' . $val
 function wp_nonce_url($value, $action) { return $value . '&_wpnonce=isolated-test'; }
 $config = json_decode(file_get_contents(__DIR__ . '/catalog-config.json'), true);
 require dirname(__DIR__) . '/' . $config['runtime'] . '/includes/plugin-catalog/class-provider.php';
-$provider = new MGD_Catalog_V3_Provider();
+$provider = new MGD_Catalog_V4_Provider();
 $item = ['repository' => 'MGD-Example-WordPress', 'basenames' => ['example/example.php'], 'url' => 'https://github.com/MichaelGahnDESIGN/MGD-Example-WordPress'];
 foreach (['1.0.6' => false, '1.0.5' => false, '1.0.7' => true, '1.1.0' => true, '' => false] as $version => $expected) {
     $fixture_offer = (object) ['new_version' => $version];

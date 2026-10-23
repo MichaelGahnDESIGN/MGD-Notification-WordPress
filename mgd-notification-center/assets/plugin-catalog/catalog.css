@@ -315,32 +315,29 @@
   justify-content: center;
   overflow: hidden;
 }
-.mgd-catalog__card-art:before {
-  content: "";
+.mgd-catalog__card-background {
   position: absolute;
-  width: 185px;
-  height: 185px;
-  border: 1px solid currentColor;
-  opacity: 0.12;
-  border-radius: 50%;
-  transform: translate(72px, 28px);
-  color: var(--art-ink);
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
 }
-.mgd-catalog__card-art:after {
-  content: "";
-  position: absolute;
-  width: 130px;
-  height: 130px;
-  border: 1px solid currentColor;
-  opacity: 0.12;
-  border-radius: 50%;
-  transform: translate(-85px, -34px);
-  color: var(--art-ink);
-}
-.mgd-catalog__card-art img {
+.mgd-catalog__card-icon {
+  position: relative;
   z-index: 1;
   border-radius: 17px;
-  box-shadow: 0 10px 18px #213d3026;
+  box-shadow: 0 0 0 4px #ffffffb3, 0 10px 24px #14251e40;
+}
+/* Deckende Schilder halten den Text auf jedem Bild lesbar. */
+.mgd-catalog__category,
+.mgd-catalog__version {
+  z-index: 2;
+  background: #fff;
+  border: 1px solid #e5e8e3;
+  border-radius: 5px;
+  padding: 4px 7px;
+  line-height: 1.4;
 }
 .mgd-catalog__category {
   position: absolute;
@@ -686,6 +683,9 @@
   }
 }
 @media (forced-colors: active) {
+  .mgd-catalog__card-background {
+    display: none;
+  }
   .mgd-catalog__button,
   .mgd-catalog__categories button {
     border: 1px solid ButtonText;
