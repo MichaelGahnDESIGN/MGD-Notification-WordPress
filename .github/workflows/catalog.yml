@@ -1,0 +1,33 @@
+name: Plugin-Katalog prüfen
+on:
+  push:
+    branches: [codex/plugin-katalog-design]
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  catalog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.1'
+      - name: Katalog-Paketvertrag
+        run: php tests/catalog-package.php
+      - name: PHP und JavaScript prüfen
+        run: |
+          python3 - <<'PY'
+          import pathlib,json,subprocess
+          config=json.loads(pathlib.Path('tests/catalog-config.json').read_text())
+          root=pathlib.Path(config['runtime'])
+          for f in [root/'includes/class-mgd-wordpress-plugin-catalog.php',*(root/'includes/plugin-catalog').glob('*.php')]:
+              subprocess.run(['php','-l',str(f)],check=True)
+          subprocess.run(['node','--check',str(root/'assets/plugin-catalog/catalog.js')],check=True)
+          PY
+      - name: ZIP bauen
+        run: python3 scripts/build-catalog-preview.py
+      - uses: actions/upload-artifact@v7
+        with:
+          name: plugin-katalog-vorschau
+          path: artifacts/catalog-preview/
