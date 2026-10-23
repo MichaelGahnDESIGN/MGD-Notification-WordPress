@@ -7,3 +7,4 @@ $wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $wpdb->prefix . 'mgd_no
 // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching,WordPress.DB.DirectDatabaseQuery.SchemaChange -- Nur nach ausdrücklicher Datenlöschoption bei Deinstallation; kein Lese-Cache.
 $wpdb->query( $wpdb->prepare( 'DROP TABLE IF EXISTS %i', $wpdb->prefix . 'mgd_notifications' ) );
 delete_option( 'mgd_notification_settings' );
+delete_option( 'mgd_notification_schema_version' );

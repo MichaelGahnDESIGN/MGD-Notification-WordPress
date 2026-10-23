@@ -28,7 +28,7 @@ final class MGD_Notification_Repository {
         $this->recipients_table    = $wpdb->prefix . 'mgd_notification_recipients';
     }
 
-    public static function install(): void {
+    public static function install(): bool {
         global $wpdb;
         require_once ABSPATH . 'wp-admin/includes/upgrade.php';
         $charset = $wpdb->get_charset_collate();
@@ -64,6 +64,12 @@ final class MGD_Notification_Repository {
             UNIQUE KEY recipient (notification_id, user_id),
             KEY inbox (user_id, read_at, dismissed_at)
         ) {$charset};" );
+        // Frisch prüfen, bevor eine erfolgreiche Schema-Version gespeichert wird.
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Nur Installationskontrolle der eigenen Tabellen, kein veralteter Schema-Cache.
+        $notifications_ready = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $wpdb->esc_like($notifications))) === $notifications;
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery,WordPress.DB.DirectDatabaseQuery.NoCaching -- Beide Tabellen müssen tatsächlich angelegt sein.
+        $recipients_ready = $wpdb->get_var($wpdb->prepare('SHOW TABLES LIKE %s', $wpdb->esc_like($recipients))) === $recipients;
+        return $notifications_ready && $recipients_ready;
     }
 
     public function create( array $input, array $recipient_ids = array() ): int {

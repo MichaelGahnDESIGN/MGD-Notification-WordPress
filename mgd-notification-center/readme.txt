@@ -48,6 +48,7 @@ No analytics or telemetry service is included. WordPress communicates with WordP
 == Changelog ==
 
 = 0.1.4 =
+* Initialize and verify site-specific plugin tables before registering notification events and endpoints.
 * Cache repeated queries within the current request and invalidate recipient and feed views immediately after changes.
 * Prepared a WordPress.org candidate with native updates, local assets and reviewed public credits.
 
