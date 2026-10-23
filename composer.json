@@ -1,0 +1,11 @@
+{
+  "name": "michael-gahn/mgd-notification-center",
+  "description": "Lokale Qualitätswerkzeuge für MGD Notification Center",
+  "type": "project",
+  "license": "GPL-2.0-or-later",
+  "require-dev": {
+    "wp-coding-standards/wpcs": "^3.3",
+    "phpcompatibility/phpcompatibility-wp": "^2.1"
+  },
+  "config": { "allow-plugins": { "dealerdirect/phpcodesniffer-composer-installer": true } }
+}

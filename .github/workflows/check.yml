@@ -1,0 +1,15 @@
+name: Prüfen
+on: [push, pull_request]
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-php@v2
+        with: { php-version: '8.1' }
+      - uses: actions/setup-node@v4
+        with: { node-version: '20' }
+      - run: find mgd-notification-center -name '*.php' -exec php -l {} \;
+      - run: node --check mgd-notification-center/assets/frontend.js
+      - run: python3 scripts/check-docs.py
+      - run: python3 scripts/build-package.py
