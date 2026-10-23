@@ -11,7 +11,6 @@
  * Text Domain: mgd-notification-center
  * License: GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
- * Update URI: https://github.com/MichaelGahnDESIGN/MGD-Notification-WordPress
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -25,7 +24,6 @@ require_once MGD_NOTIFICATION_DIR . 'includes/class-mgd-notification-repository.
 require_once MGD_NOTIFICATION_DIR . 'includes/class-mgd-notification-events.php';
 require_once MGD_NOTIFICATION_DIR . 'includes/class-mgd-notification-rest.php';
 require_once MGD_NOTIFICATION_DIR . 'includes/class-mgd-notification-renderer.php';
-require_once MGD_NOTIFICATION_DIR . 'includes/class-mgd-wordpress-plugin-catalog.php';
 require_once MGD_NOTIFICATION_DIR . 'includes/class-mgd-notification-admin.php';
 require_once MGD_NOTIFICATION_DIR . 'includes/class-mgd-notification-plugin.php';
 
@@ -34,7 +32,7 @@ register_activation_hook( __FILE__, array( 'MGD_Notification_Plugin', 'activate'
 MGD_Notification_Plugin::boot();
 
 require_once __DIR__ . '/includes/class-mgd-plugin-admin-tools.php';
-\MGD_Plugin_Admin_Tools_20261023::register([
+\MGD_WordPress_Org_Admin_Tools::register([
     'file' => __FILE__,
     'repo' => 'MGD-Notification-WordPress',
     'slug' => 'mgd-notification-center',
