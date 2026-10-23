@@ -103,7 +103,9 @@ final class MGD_Catalog_V3_Provider {
                 $item['installed'] = true;
                 $item['active'] = is_plugin_active( $file );
                 $item['installed_version'] = $plugin['Version'];
-                if ( current_user_can( 'update_plugins' ) && isset( $updates->response[ $file ] ) ) {
+                $offered_version = $updates->response[ $file ]->new_version ?? '';
+                // WordPress kann direkt nach dem Update noch das vorige Angebot im Cache halten.
+                if ( current_user_can( 'update_plugins' ) && is_string( $offered_version ) && version_compare( $offered_version, $plugin['Version'], '>' ) ) {
                     $item['update_url'] = wp_nonce_url( self_admin_url( 'update.php?action=upgrade-plugin&plugin=' . rawurlencode( $file ) ), 'upgrade-plugin_' . $file );
                 }
                 break;
