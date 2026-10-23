@@ -25,6 +25,7 @@ require_once MGD_NOTIFICATION_DIR . 'includes/class-mgd-notification-repository.
 require_once MGD_NOTIFICATION_DIR . 'includes/class-mgd-notification-events.php';
 require_once MGD_NOTIFICATION_DIR . 'includes/class-mgd-notification-rest.php';
 require_once MGD_NOTIFICATION_DIR . 'includes/class-mgd-notification-renderer.php';
+require_once MGD_NOTIFICATION_DIR . 'includes/class-mgd-wordpress-plugin-catalog.php';
 require_once MGD_NOTIFICATION_DIR . 'includes/class-mgd-notification-admin.php';
 require_once MGD_NOTIFICATION_DIR . 'includes/class-mgd-notification-plugin.php';
 
