@@ -107,3 +107,7 @@ Fehler, Wünsche und nachvollziehbare Verbesserungsvorschläge bitte als [GitHub
 ## Lizenz
 
 Dieses Plugin steht unter [GPL-2.0-or-later](mgd-notification-center/LICENSE).
+
+## 0.1.2 – Plugin-Verwaltung
+
+Separate Update-Prüfung, Plugin-Links und ergänzte lokale Details. [Anleitung](docs/WORDPRESS-VERWALTUNG.md).

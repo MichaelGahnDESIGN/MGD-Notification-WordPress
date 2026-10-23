@@ -3,7 +3,7 @@
  * Plugin Name: MGD Notification Center
  * Plugin URI: https://github.com/MichaelGahnDESIGN/MGD-Notification-WordPress
  * Description: Öffentliche und persönliche Benachrichtigungen ohne externe Dienste.
- * Version: 0.1.1
+ * Version: 0.1.2
  * Requires at least: 6.5
  * Requires PHP: 8.1
  * Author: Michael Gahn DESIGN
@@ -16,7 +16,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'MGD_NOTIFICATION_VERSION', '0.1.1' );
+define( 'MGD_NOTIFICATION_VERSION', '0.1.2' );
 define( 'MGD_NOTIFICATION_FILE', __FILE__ );
 define( 'MGD_NOTIFICATION_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MGD_NOTIFICATION_URL', plugin_dir_url( __FILE__ ) );
@@ -32,3 +32,18 @@ require_once MGD_NOTIFICATION_DIR . 'includes/class-mgd-notification-plugin.php'
 register_activation_hook( __FILE__, array( 'MGD_Notification_Plugin', 'activate' ) );
 
 MGD_Notification_Plugin::boot();
+
+require_once __DIR__ . '/includes/class-mgd-plugin-admin-tools.php';
+\MGD_Plugin_Admin_Tools_20261023::register([
+    'file' => __FILE__,
+    'repo' => 'MGD-Notification-WordPress',
+    'slug' => 'mgd-notification-center',
+    'name' => 'MGD Notification Center',
+    'description' => 'Öffentliche und persönliche Benachrichtigungen ohne externe Dienste.',
+    'version' => '0.1.2',
+    'settings' => 'admin.php?page=mgd-notification-settings',
+    'requires' => '6.5',
+    'php' => '8.1',
+    'caches' => ['mgd_admin_release_mgd-notification-center'],
+    'package' => 'mgd-notification-center-{version}.zip',
+]);
