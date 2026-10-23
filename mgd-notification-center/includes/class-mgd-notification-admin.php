@@ -9,7 +9,6 @@ final class MGD_Notification_Admin {
         add_action( 'admin_menu', array( $this, 'menu' ) );
         add_action( 'admin_post_mgd_notification_save', array( $this, 'save' ) );
         add_action( 'add_meta_boxes', array( $this, 'meta_box' ) );
-        ( new MGD_WordPress_Plugin_Catalog() )->register( 'mgd-notification-center' );
     }
 
     public function menu(): void {
@@ -59,9 +58,9 @@ final class MGD_Notification_Admin {
         $recipient = absint( $_POST['recipient_id'] ?? 0 );
         if ( 'personal' === $scope && ! $recipient ) { wp_die( esc_html__( 'Persönliche Meldungen benötigen einen Empfänger.', 'mgd-notification-center' ) ); }
         $input = array(
-            'scope' => $scope, 'event_type' => 'manual', 'title' => wp_unslash( $_POST['title'] ?? '' ),
-            'message' => wp_unslash( $_POST['message'] ?? '' ), 'target_url' => wp_unslash( $_POST['target_url'] ?? '' ),
-            'status' => sanitize_key( wp_unslash( $_POST['status'] ?? 'draft' ) ), 'published_at' => wp_unslash( $_POST['published_at'] ?? '' ),
+            'scope' => $scope, 'event_type' => 'manual', 'title' => sanitize_text_field( wp_unslash( $_POST['title'] ?? '' ) ),
+            'message' => wp_kses_post( wp_unslash( $_POST['message'] ?? '' ) ), 'target_url' => esc_url_raw( wp_unslash( $_POST['target_url'] ?? '' ) ),
+            'status' => sanitize_key( wp_unslash( $_POST['status'] ?? 'draft' ) ), 'published_at' => sanitize_text_field( wp_unslash( $_POST['published_at'] ?? '' ) ),
         );
         $notification_id = absint( $_POST['notification_id'] ?? 0 );
         if ( $notification_id ) {

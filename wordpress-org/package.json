@@ -1,0 +1,7 @@
+{
+  "slug": "mgd-notification-center",
+  "source": "mgd-notification-center",
+  "include": [
+    "."
+  ]
+}
