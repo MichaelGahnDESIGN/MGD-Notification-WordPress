@@ -9,8 +9,10 @@ jobs:
       # damit die PHP-8.1-Prüfung reproduzierbar bleibt und keine bewegliche Action-Referenz lädt.
       - uses: shivammathur/setup-php@f3e473d116dcccaddc5834248c87452386958240 # v2.37.2
         with: { php-version: '8.1' }
-      - uses: actions/setup-node@v4
-        with: { node-version: '20' }
+      # CVE-2026-111497: Node 20 ist EOL. Der Patchstand ist absichtlich exakt
+      # festgelegt, damit jeder Prüflauf eine bekannte, unterstützte Runtime nutzt.
+      - uses: actions/setup-node@249970729cb0ef3589644e2896645e5dc5ba9c38 # v6.5.0
+        with: { node-version: '24.22.1' }
       - run: find mgd-notification-center -name '*.php' -exec php -l {} \;
       - run: node --check mgd-notification-center/assets/frontend.js
       - run: python3 scripts/check-docs.py
