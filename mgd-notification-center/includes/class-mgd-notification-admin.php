@@ -32,7 +32,6 @@ final class MGD_Notification_Admin {
         $item = $edit_id ? $this->repository->get_for_admin( $edit_id ) : null;
         $item = $item ?: array( 'id' => 0, 'title' => '', 'message' => '', 'target_url' => '', 'scope' => 'public', 'status' => 'draft', 'published_at' => '', 'recipient_ids' => '' );
         $date_value = ! empty( $item['published_at'] ) ? gmdate( 'Y-m-d\\TH:i', strtotime( $item['published_at'] ) ) : '';
-        ?>
         $rows = $this->repository->list_for_admin();
         $counts = array_count_values( array_column( $rows, 'status' ) );
         ?>
