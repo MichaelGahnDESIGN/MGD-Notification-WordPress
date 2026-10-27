@@ -17,6 +17,7 @@ jobs:
         run: |
           php tests/catalog-package.php
           php tests/catalog-update-state.php
+          php tests/catalog-media.php
       - name: PHP und JavaScript prüfen
         run: |
           python3 - <<'PY'
