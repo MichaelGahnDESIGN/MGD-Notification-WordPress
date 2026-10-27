@@ -33,7 +33,7 @@ MGD Notification Center bringt eine zugängliche Glocke in WordPress. Sie zeigt 
 
 ## Installation
 
-1. Lade [**MGD Notification Center 0.1.6**](https://github.com/MichaelGahnDESIGN/MGD-Notification-WordPress/releases/download/v0.1.6/mgd-notification-center-0.1.6.zip) herunter.
+1. Lade [**MGD Notification Center 0.1.7**](https://github.com/MichaelGahnDESIGN/MGD-Notification-WordPress/releases/download/v0.1.7/mgd-notification-center-0.1.7.zip) herunter.
 2. Öffne in WordPress **Plugins → Installieren → Plugin hochladen**.
 3. Wähle die ZIP-Datei, installiere sie und aktiviere das Plugin.
 4. Stelle unter **Notification Center → Einstellungen** die gewünschte Position ein.
@@ -132,7 +132,9 @@ Sieben passende, lokal mitgelieferte Hintergrundbilder ergänzen die Plugin-Kart
 
 Der Redaktionsbereich zeigt den Status der Meldungen auf einen Blick, ist für kleine Bildschirmbreiten optimiert und unterscheidet öffentliche von persönlichen Meldungen klarer. Persönliche Meldungen lassen sich nur noch für vorhandene WordPress-Konten speichern.
 
-## Unveröffentlicht
+## 0.1.7 – Icons und Hintergründe aus dem Feed (27.10.2026)
+
+Icons und Hintergründe der Karten unter „Weitere Plugins“ kommen jetzt aus theme.michael-gahn.de. Der Server holt sie einmal und speichert sie lokal, der Browser lädt nichts extern. Ohne Bild bleibt das mitgelieferte Motiv. Versionen werden ohne führendes „v“ angezeigt.
 
 ✅ Der Redaktionsbereich berechnet Liste und Statusübersicht wieder serverseitig. Persönliche Meldungen werden erst beim bewussten Öffnen der einzelnen Meldung als gelesen markiert. Die Glocke lässt sich zusätzlich mit Escape schließen und setzt den Fokus zurück.
 
