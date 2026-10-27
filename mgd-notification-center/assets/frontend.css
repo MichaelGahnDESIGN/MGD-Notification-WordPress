@@ -15,3 +15,9 @@
 .mgd-notification-dialog header button{flex:none;width:44px;height:44px;border:1px solid #bcc5d4;border-radius:10px;background:Canvas;color:CanvasText;font-size:26px;cursor:pointer}
 .mgd-notification-dialog__body{padding:20px;overflow:auto;overscroll-behavior:contain;line-height:1.7}
 .mgd-notification-dialog__body p{white-space:pre-line;margin:0 0 18px}
+
+/* Das Panel bleibt auch bei der voreingestellten unteren Platzierung im Fenster. */
+.mgd-notification-center__panel{box-sizing:border-box;max-height:min(30rem,calc(100dvh - 7rem));overscroll-behavior:contain}
+.mgd-notification-center--floating-bottom-left .mgd-notification-center__panel,.mgd-notification-center--floating-bottom-right .mgd-notification-center__panel{bottom:calc(100% + .5rem);top:auto}
+.mgd-notification-center--floating-top-left .mgd-notification-center__panel,.mgd-notification-center--floating-top-right .mgd-notification-center__panel{top:calc(100% + .5rem)}
+.mgd-notification-center--floating-top-left .mgd-notification-center__panel,.mgd-notification-center--floating-bottom-left .mgd-notification-center__panel,.mgd-notification-center--inline .mgd-notification-center__panel{left:0;right:auto}
