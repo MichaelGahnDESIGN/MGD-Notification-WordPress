@@ -67,6 +67,7 @@ final class MGD_Notification_Repository {
         );
         $wpdb->insert( $this->notifications_table, $data );
         $id = (int) $wpdb->insert_id;
+        if ( $id > 0 ) { update_option( 'mgd_notification_modal_' . $id, ! empty( $input['open_in_modal'] ), false ); }
         foreach ( array_unique( array_map( 'absint', $recipient_ids ) ) as $user_id ) {
             if ( $user_id > 0 && get_user_by( 'id', $user_id ) ) {
                 $wpdb->query( $wpdb->prepare( "INSERT IGNORE INTO {$this->recipients_table} (notification_id, user_id, created_at) VALUES (%d, %d, %s)", $id, $user_id, $now ) );
@@ -86,16 +87,25 @@ final class MGD_Notification_Repository {
         return $existing ?: $this->create( $input, $recipients );
     }
 
+    /** Anzeigeoptionen liegen getrennt als nicht automatisch geladene WordPress-Optionen.
+     * Bestehende Installationen brauchen dadurch keine Tabellenmigration.
+     * Die Sichtbarkeits-/Empfängerabfragen werden vor dieser Ergänzung ausgeführt. */
+    private function display_options( array $items ): array {
+        foreach ( $items as &$item ) { $item['open_in_modal'] = (bool) get_option( 'mgd_notification_modal_' . (int) $item['id'], false ); }
+        unset( $item );
+        return $items;
+    }
+
     public function public_feed( int $limit = 8 ): array {
         global $wpdb;
         $now = current_time( 'mysql', true );
-        return $wpdb->get_results( $wpdb->prepare( "SELECT id, title, message, target_url, published_at FROM {$this->notifications_table} WHERE scope = 'public' AND status = 'published' AND published_at <= %s AND (expires_at IS NULL OR expires_at > %s) ORDER BY published_at DESC LIMIT %d", $now, $now, max( 1, min( 30, $limit ) ) ), ARRAY_A );
+        return $this->display_options( $wpdb->get_results( $wpdb->prepare( "SELECT id, title, message, target_url, published_at, updated_at FROM {$this->notifications_table} WHERE scope = 'public' AND status = 'published' AND published_at <= %s AND (expires_at IS NULL OR expires_at > %s) ORDER BY published_at DESC LIMIT %d", $now, $now, max( 1, min( 30, $limit ) ) ), ARRAY_A ) );
     }
 
     public function personal_feed( int $user_id ): array {
         global $wpdb;
         $now = current_time( 'mysql', true );
-        return $wpdb->get_results( $wpdb->prepare( "SELECT n.id, n.title, n.message, n.target_url, n.published_at, r.read_at FROM {$this->notifications_table} n INNER JOIN {$this->recipients_table} r ON r.notification_id = n.id WHERE r.user_id = %d AND r.dismissed_at IS NULL AND n.scope = 'personal' AND n.status = 'published' AND n.published_at <= %s AND (n.expires_at IS NULL OR n.expires_at > %s) ORDER BY n.published_at DESC LIMIT 30", $user_id, $now, $now ), ARRAY_A );
+        return $this->display_options( $wpdb->get_results( $wpdb->prepare( "SELECT n.id, n.title, n.message, n.target_url, n.published_at, n.updated_at, r.read_at FROM {$this->notifications_table} n INNER JOIN {$this->recipients_table} r ON r.notification_id = n.id WHERE r.user_id = %d AND r.dismissed_at IS NULL AND n.scope = 'personal' AND n.status = 'published' AND n.published_at <= %s AND (n.expires_at IS NULL OR n.expires_at > %s) ORDER BY n.published_at DESC LIMIT 30", $user_id, $now, $now ), ARRAY_A ) );
     }
 
     public function mark_read( int $notification_id, int $user_id ): bool {
@@ -107,7 +117,7 @@ final class MGD_Notification_Repository {
     public function get_for_admin( int $notification_id ): ?array {
         global $wpdb;
         $item = $wpdb->get_row( $wpdb->prepare( "SELECT n.*, GROUP_CONCAT(r.user_id ORDER BY r.user_id) AS recipient_ids FROM {$this->notifications_table} n LEFT JOIN {$this->recipients_table} r ON r.notification_id = n.id WHERE n.id = %d GROUP BY n.id", $notification_id ), ARRAY_A );
-        return is_array( $item ) ? $item : null;
+        return is_array( $item ) ? $this->display_options( array( $item ) )[0] : null;
     }
 
     public function list_for_admin(): array {
@@ -137,6 +147,7 @@ final class MGD_Notification_Repository {
         if ( false === $updated ) {
             return false;
         }
+        update_option( 'mgd_notification_modal_' . $notification_id, ! empty( $input['open_in_modal'] ), false );
         $wpdb->delete( $this->recipients_table, array( 'notification_id' => $notification_id ), array( '%d' ) );
         if ( 'personal' === $scope ) {
             $now = current_time( 'mysql', true );

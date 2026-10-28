@@ -42,6 +42,7 @@ final class MGD_Notification_Admin {
             <table class="form-table"><tr><th><label for="mgd-title">Titel</label></th><td><input id="mgd-title" class="regular-text" name="title" value="<?php echo esc_attr( $item['title'] ); ?>" required></td></tr>
             <tr><th><label for="mgd-message">Text</label></th><td><textarea id="mgd-message" class="large-text" rows="5" name="message" required><?php echo esc_textarea( $item['message'] ); ?></textarea></td></tr>
             <tr><th><label for="mgd-url">Link</label></th><td><input id="mgd-url" class="regular-text" name="target_url" type="url" value="<?php echo esc_attr( $item['target_url'] ); ?>"></td></tr>
+            <tr><th>Öffnungsverhalten</th><td><label><input type="checkbox" name="open_in_modal" value="1" <?php checked( ! empty( $item['open_in_modal'] ) ); ?>> Inhalt als Modal öffnen</label><p class="description">Zeigt den vollständigen Benachrichtigungstext als Klartext im Dialog. Ein optionaler Link bleibt dort verfügbar. Es werden keine fremden Seiten eingebettet.</p></td></tr>
             <tr><th>Bereich</th><td><fieldset><legend class="screen-reader-text">Bereich</legend><label><input type="radio" name="scope" value="public" <?php checked( $item['scope'], 'public' ); ?>> Öffentlich</label><br><label><input type="radio" name="scope" value="personal" <?php checked( $item['scope'], 'personal' ); ?>> Persönlich</label></fieldset><p class="description">Persönliche Meldungen werden ausschließlich dem gewählten WordPress-Konto gezeigt.</p></td></tr>
             <tr><th><label for="mgd-recipient">Empfänger-ID</label></th><td><input id="mgd-recipient" name="recipient_id" type="number" min="1" value="<?php echo esc_attr( $item['recipient_ids'] ); ?>" aria-describedby="mgd-recipient-help"><p id="mgd-recipient-help" class="description">Nur für persönliche Meldungen. Eine unbekannte ID wird nicht gespeichert.</p></td></tr>
             <tr><th>Status</th><td><select name="status"><?php foreach ( array( 'draft' => 'Entwurf', 'published' => 'Veröffentlicht', 'scheduled' => 'Geplant', 'archived' => 'Archiviert' ) as $value => $label ) : ?><option value="<?php echo esc_attr( $value ); ?>" <?php selected( $item['status'], $value ); ?>><?php echo esc_html( $label ); ?></option><?php endforeach; ?></select></td></tr>
@@ -78,6 +79,7 @@ final class MGD_Notification_Admin {
             wp_die( esc_html__( 'Für eine persönliche Meldung wird ein vorhandenes WordPress-Konto benötigt.', 'mgd-notification-center' ), esc_html__( 'Empfänger prüfen', 'mgd-notification-center' ), array( 'response' => 400 ) );
         }
         $input = array(
+            'open_in_modal' => isset( $_POST['open_in_modal'] ) && '1' === $_POST['open_in_modal'],
             'scope' => $scope, 'event_type' => 'manual', 'title' => wp_unslash( $_POST['title'] ?? '' ),
             'message' => wp_unslash( $_POST['message'] ?? '' ), 'target_url' => wp_unslash( $_POST['target_url'] ?? '' ),
             'status' => sanitize_key( wp_unslash( $_POST['status'] ?? 'draft' ) ), 'published_at' => wp_unslash( $_POST['published_at'] ?? '' ),

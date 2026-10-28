@@ -139,3 +139,12 @@ Icons und Hintergründe der Karten unter „Weitere Plugins“ kommen jetzt aus 
 ✅ Der Redaktionsbereich berechnet Liste und Statusübersicht wieder serverseitig. Persönliche Meldungen werden erst beim bewussten Öffnen der einzelnen Meldung als gelesen markiert. Die Glocke lässt sich zusätzlich mit Escape schließen und setzt den Fokus zurück.
 
 ⚠️ Die Änderungen sind lokal geprüft, aber noch nicht in einer echten WordPress-Testinstallation per Browser kontrolliert.
+
+
+## 0.2.0 – Lesestatus und Inhaltsdialog (Quellstand)
+
+„Alles gelesen“ markiert die aktuell geladenen Meldungen bewusst als gelesen. Das reine Öffnen der Glocke markiert nichts. Öffentliche Lesemarken bleiben ausschließlich lokal im Browser, persönliche Lesemarken werden über die bestehende authentifizierte Empfänger-Route gespeichert. Fehlgeschlagene Anfragen werden nicht als Erfolg angezeigt. Blockierter Browserspeicher führt nur zu einem flüchtigen Zustand, nicht zu einem Tracking-Ersatz.
+
+Beim Erstellen und Bearbeiten einer Meldung gibt es „Inhalt als Modal öffnen“. Der Dialog zeigt den vollständigen Benachrichtigungstext als Klartext und gegebenenfalls einen normalen Link. Keine fremden Webseiten, Bilder oder Skripte werden eingebettet. Die Option ist standardmäßig aus und wird pro Meldung als nicht automatisch geladene WordPress-Option gespeichert; eine Tabellenmigration ist nicht erforderlich. Sichtbarkeit und Empfängerrechte bleiben in den bisherigen Abfragen erhalten.
+
+Öffentliche Meldungen verwenden einen neuen revisionsbezogenen Browser-Leseschlüssel. Bestehende pauschale Lesemarken älterer Versionen werden nicht übernommen. Datenbank- und Browser-Release sind getrennt von einer Installation auf einer konkreten Website zu prüfen. Der Download-Link oben verweist weiterhin auf die zuletzt veröffentlichte ZIP-Version.
