@@ -1,5 +1,6 @@
 {
   "MGD-AI-Kennzeichnung-WordPress": {
+    "slug": "mgd-ai-kennzeichnung-wordpress",
     "name": "KI-Bildkennzeichnung",
     "description": "Zeige transparent, welche Bilder mit KI entstanden sind. Direkt aus deiner Mediathek, dezent im Frontend.",
     "category": "Medien",
@@ -15,6 +16,7 @@
     "tier": "free"
   },
   "MGD-Maintenance-WordPress": {
+    "slug": "mgd-maintenance-wordpress",
     "name": "Maintenance Studio",
     "description": "Eine Wartungsseite, die zu deiner Marke passt. Mit eigenen Layouts, Live-Vorschau und klar geregelten Zugriffen.",
     "category": "Gestaltung",
@@ -30,6 +32,7 @@
     "tier": "free"
   },
   "MGD-Barrierefrei-WordPress": {
+    "slug": "mgd-barrierefrei-wordpress",
     "name": "Barrierefrei",
     "description": "Ergänze lokale Lesehilfen und erstelle einen bearbeitbaren Entwurf für deine Erklärung zur Barrierefreiheit.",
     "category": "Barrierefreiheit",
@@ -45,6 +48,7 @@
     "tier": "free"
   },
   "MGD-Share-WordPress": {
+    "slug": "mgd-share-wordpress",
     "name": "Share",
     "description": "Mach Inhalte leichter teilbar. Mit nativer Teilen-Funktion, Link-Kopie und einem Datenschutz-Dashboard.",
     "category": "Marketing",
@@ -60,6 +64,7 @@
     "tier": "free"
   },
   "MGD-Notification-WordPress": {
+    "slug": "mgd-notification-wordpress",
     "name": "Notification Center",
     "description": "Halte Besucher und angemeldete Nutzer auf dem Laufenden. Öffentliche Neuigkeiten und persönliche Mitteilungen an einem Ort.",
     "category": "Kommunikation",
@@ -75,6 +80,7 @@
     "tier": "free"
   },
   "MGD_Giveaway_WP-Plugin": {
+    "slug": "mgd-giveaway-wordpress",
     "name": "Giveaway",
     "description": "Teile E-Books und PDFs über gestaltbare Formulare. Mit Zustimmungsfeldern und geschützten Download-Links.",
     "category": "Marketing",
@@ -90,6 +96,7 @@
     "tier": "free"
   },
   "MGD_WordPress-MCP": {
+    "slug": "mgd-wordpress-mcp",
     "name": "WordPress MCP",
     "description": "Verbinde freigegebene MCP-Clients mit WordPress. Du bestimmst, welche Inhalte und Funktionen zugänglich sind.",
     "category": "Administration",

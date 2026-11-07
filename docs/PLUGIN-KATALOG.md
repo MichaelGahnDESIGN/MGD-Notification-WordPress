@@ -12,7 +12,7 @@ Zustände: Aktualisieren zeigt „Wird aktualisiert …“; keine Treffer bieten
 
 ## Datenquelle und Sicherheit
 
-Quelle ist `https://theme.michael-gahn.de/api/catalog/plugins.json`, nicht die Gestaltung der Seite. Der Pfad lieferte bei der Bestandsprüfung am 23.10.2026 HTTP 404. Es wurde kein Plattform- oder Kunden-Deployment ausgeführt.
+Quelle ist `https://theme.michael-gahn.de/api/v1/recommendations/wordpress.json`. Sichtbarkeit, Name, Beschreibung und Version werden zentral im Theme-Katalog gepflegt; Kategorien, lokale Icons und Hintergrundbilder bleiben Bestandteil dieses Plugins. Der Abruf erfolgt ausschließlich serverseitig im WordPress-Admin, höchstens alle 15 Minuten. Es werden keine Besucher-, Shop- oder Kontodaten übertragen und keine GitHub- oder Bildressourcen nachgeladen.
 
 Der Cache hält öffentliche Metadaten bis zu sechs Stunden. Installationsstatus und WordPress-Updateangebote werden bei jedem Seitenaufruf frisch ermittelt. Icons liegen lokal im Plugin; keine Besucher- oder Zugangsdaten werden an den Feed übertragen. Die bekannten eigenen Grafiken stammen aus den jeweiligen MGD-Plugin-Repositories.
 
