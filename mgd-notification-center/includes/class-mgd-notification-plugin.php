@@ -3,6 +3,9 @@ defined( 'ABSPATH' ) || exit;
 
 /** Zentraler Einstiegspunkt; hält Initialisierung und Migration bewusst getrennt. */
 final class MGD_Notification_Plugin {
+    /** Höchstzahl je Liste, gilt auch für „Alle anzeigen“. */
+    public const FEED_LIMIT = 30;
+
     public static function boot(): void {
         add_action( 'plugins_loaded', array( __CLASS__, 'load' ) );
     }
@@ -25,10 +28,16 @@ final class MGD_Notification_Plugin {
             'placement'           => 'floating-bottom-right',
             'announce_post_types' => array( 'post', 'page', 'product' ),
             'public_limit'        => 8,
+            'visible_limit'       => 5,
+            'icon'                => 'bell',
         );
     }
 
     public static function settings(): array {
-        return wp_parse_args( get_option( 'mgd_notification_settings', array() ), self::default_settings() );
+        $settings = wp_parse_args( get_option( 'mgd_notification_settings', array() ), self::default_settings() );
+        // Anzahl im Panel immer 1-30
+        $settings['visible_limit'] = max( 1, min( self::FEED_LIMIT, (int) $settings['visible_limit'] ) );
+        $settings['icon'] = MGD_Notification_Icons::valid( (string) $settings['icon'] );
+        return $settings;
     }
 }

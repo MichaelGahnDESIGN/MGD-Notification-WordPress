@@ -104,3 +104,12 @@
 		grid-template-columns: repeat(2, 1fr);
 	}
 }
+
+/* Icon Auswahl Einstellungen */
+.mgd-notification-admin__icons{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:8px;max-width:720px}
+.mgd-notification-admin__icon{position:relative;display:block;cursor:pointer}
+.mgd-notification-admin__icon input{position:absolute;opacity:0;inset:0;margin:0}
+.mgd-notification-admin__icon span{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 8px;border:1px solid #c3c4c7;border-radius:10px;background:#fff;text-align:center;font-size:12px}
+.mgd-notification-admin__icon input:checked+span{border-color:#2271b1;box-shadow:0 0 0 2px #2271b1;background:#f0f6fc}
+.mgd-notification-admin__icon input:focus-visible+span{outline:2px solid #2271b1;outline-offset:2px}
+.mgd-notification-admin__icon-svg{width:26px;height:26px}

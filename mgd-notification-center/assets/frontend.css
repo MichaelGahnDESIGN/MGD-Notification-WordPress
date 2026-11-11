@@ -21,3 +21,45 @@
 .mgd-notification-center--floating-bottom-left .mgd-notification-center__panel,.mgd-notification-center--floating-bottom-right .mgd-notification-center__panel{bottom:calc(100% + .5rem);top:auto}
 .mgd-notification-center--floating-top-left .mgd-notification-center__panel,.mgd-notification-center--floating-top-right .mgd-notification-center__panel{top:calc(100% + .5rem)}
 .mgd-notification-center--floating-top-left .mgd-notification-center__panel,.mgd-notification-center--floating-bottom-left .mgd-notification-center__panel,.mgd-notification-center--inline .mgd-notification-center__panel{left:0;right:auto}
+
+/* 0.3.0 Kopf, Ausblenden, Alle anzeigen */
+.mgd-notification-center__head{display:flex;align-items:center;justify-content:space-between;gap:.75rem;margin-bottom:.25rem}
+.mgd-notification-center__status:empty{display:none}
+.mgd-notification-center__list li{grid-template-columns:1fr auto;align-items:start;column-gap:.5rem}
+.mgd-notification-center__list li>.mgd-notification-center__text,.mgd-notification-center__list li>.mgd-notification-center__meta{grid-column:1/-1}
+.mgd-notification-center__text{font-size:.9rem;line-height:1.5}
+.mgd-notification-center__meta{font-size:.75rem;opacity:.75}
+.mgd-notification-center__hide{inline-size:32px;block-size:32px;border:1px solid transparent;border-radius:8px;background:transparent;color:inherit;font-size:20px;line-height:1;cursor:pointer;opacity:.7}
+.mgd-notification-center__hide:hover{opacity:1;border-color:#bcc5d4}
+.mgd-notification-center__show-all{display:block;inline-size:100%;min-height:44px;margin-top:.5rem;border:1px solid #6c7a91;border-radius:.6rem;background:transparent;color:inherit;font:inherit;font-weight:700;cursor:pointer}
+.mgd-notification-dialog header{align-items:center}
+.mgd-notification-dialog h2{flex:1}
+.mgd-notification-dialog__read-all{min-height:44px;padding:.5rem .9rem;border:1px solid #6c7a91;border-radius:.6rem;background:#edf1f7;color:#172747;font:inherit;cursor:pointer}
+.mgd-notification-dialog__read-all:disabled{opacity:.55;cursor:default}
+.mgd-notification-dialog__list{display:grid;gap:.5rem}
+.mgd-notification-dialog__item{border:1px solid #dce1ec;border-radius:12px}
+.mgd-notification-dialog__item.is-read{opacity:.75}
+.mgd-notification-dialog__item summary{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;padding:.85rem 1rem;cursor:pointer;font-weight:700;list-style-position:inside}
+.mgd-notification-dialog__item summary small{flex:none;font-weight:400;opacity:.75}
+.mgd-notification-dialog__content{padding:0 1rem 1rem;line-height:1.7;overflow-wrap:anywhere}
+.mgd-notification-dialog__content a{color:#005fcc;text-decoration:underline}
+.mgd-notification-dialog__content p{margin:0 0 .75rem}
+.mgd-notification-dialog__actions{display:flex;flex-wrap:wrap;align-items:center;gap:.75rem;margin-top:.5rem}
+.mgd-notification-dialog__hide{min-height:40px;padding:.4rem .8rem;border:1px solid #bcc5d4;border-radius:.6rem;background:transparent;color:inherit;font:inherit;cursor:pointer}
+@media (max-width:600px){.mgd-notification-dialog header{flex-wrap:wrap}.mgd-notification-dialog h2{flex-basis:calc(100% - 60px)}.mgd-notification-dialog__item summary{flex-direction:column;gap:.25rem}}
+.mgd-notification-dialog [hidden]{display:none!important}
+.mgd-notification-dialog header .mgd-notification-dialog__read-all{width:auto;height:auto;font-size:.95rem;white-space:nowrap}
+/* Ausblenden als Text-Button */
+.mgd-notification-center__list li{grid-template-columns:1fr}
+.mgd-notification-center__foot{display:flex;align-items:center;justify-content:space-between;gap:.5rem}
+.mgd-notification-center__hide{inline-size:auto;block-size:auto;min-height:32px;padding:.25rem .6rem;border:1px solid #bcc5d4;font-size:.8rem;opacity:1}
+.mgd-notification-center__hide:hover{border-color:#6c7a91}
+/* Gelesene ausblenden */
+.mgd-notification-center__head{flex-wrap:wrap}
+.mgd-notification-center__tools{display:flex;flex-wrap:wrap;gap:.4rem}
+.mgd-notification-center__tools button{min-height:36px;padding:.35rem .65rem;font-size:.8rem}
+.mgd-notification-center__hide-read{border:1px solid #6c7a91;border-radius:.6rem;background:transparent;color:inherit;font:inherit;cursor:pointer}
+.mgd-notification-center__hide-read:disabled{opacity:.55;cursor:default}
+/* SVG Glocke statt Emoji */
+.mgd-notification-center__button{display:inline-grid;place-items:center;padding:0}
+.mgd-notification-center__icon{width:22px;height:22px;display:block}
