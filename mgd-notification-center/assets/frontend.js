@@ -149,15 +149,18 @@
     const closer = el('button', 'mgd-notification-dialog__close', '×'); closer.type = 'button'; closer.setAttribute('aria-label', 'Fenster schließen');
     header.append(heading, dialogReadAll, dialogHideRead, closer);
     const body = el('div', 'mgd-notification-dialog__body');
+    const dialogStatus = el('p', 'mgd-notification-center__status'); dialogStatus.setAttribute('role', 'status'); dialogStatus.setAttribute('aria-live', 'polite');
     const dialogEmpty = el('p', 'mgd-notification-dialog__empty', 'Keine Benachrichtigungen.');
     const allList = el('div', 'mgd-notification-dialog__list');
-    body.append(dialogEmpty, allList);
+    body.append(dialogStatus, dialogEmpty, allList);
     dialog.append(header, body); document.body.append(dialog);
     const closeDialog = () => { if (typeof dialog.close === 'function') dialog.close(); else { dialog.open = false; bell.focus(); } };
     closer.addEventListener('click', closeDialog);
     dialog.addEventListener('close', () => bell.focus());
     dialog.addEventListener('click', event => { if (event.target === dialog) closeDialog(); });
 
+    // Meldung dahin, wo der Nutzer gerade ist (Fenster offen > Status im Fenster)
+    const say = text => { (dialog.open ? dialogStatus : status).textContent = text; };
     function openDialog(focusItem) {
       render();
       closePanel();
@@ -172,7 +175,7 @@
       b.setAttribute('aria-label', 'Meldung ausblenden: ' + String(item.title || ''));
       b.addEventListener('click', async event => {
         event.preventDefault(); event.stopPropagation();
-        if (!await hide(item)) status.textContent = 'Meldung konnte nicht ausgeblendet werden. Bitte erneut versuchen.';
+        if (!await hide(item)) say('Meldung konnte nicht ausgeblendet werden. Bitte erneut versuchen.');
       });
       return b;
     }
@@ -184,7 +187,7 @@
       const action = el(modal || !target ? 'button' : 'a', 'mgd-notification-center__item-action', String(item.title || ''));
       if (action.tagName === 'BUTTON') { action.type = 'button'; action.setAttribute('aria-haspopup', 'dialog'); } else action.href = target;
       action.addEventListener('click', () => {
-        markRead(item).then(ok => { if (!ok) status.textContent = 'Lesestatus konnte nicht gespeichert werden.'; });
+        markRead(item).then(ok => { if (!ok) say('Lesestatus konnte nicht gespeichert werden.'); });
         if (action.tagName === 'BUTTON') openDialog(item);
       });
       const text = plainText(item.message);
@@ -207,7 +210,7 @@
       const actions = el('div', 'mgd-notification-dialog__actions');
       if (target) { const link = el('a', 'mgd-notification-dialog__link', 'Verlinkten Inhalt öffnen'); link.href = target; actions.append(link); }
       const hideBtn = el('button', 'mgd-notification-dialog__hide', 'Ausblenden'); hideBtn.type = 'button';
-      hideBtn.addEventListener('click', async () => { if (!await hide(item)) status.textContent = 'Meldung konnte nicht ausgeblendet werden.'; });
+      hideBtn.addEventListener('click', async () => { if (!await hide(item)) say('Meldung konnte nicht ausgeblendet werden.'); });
       actions.append(hideBtn); content.append(actions);
       details.append(summary, content);
       details.addEventListener('toggle', () => { if (details.open) markRead(item); });
@@ -248,17 +251,17 @@
 
     async function onReadAll() {
       if (busy) return;
-      busy = true; render(); status.textContent = 'Wird als gelesen markiert …';
+      busy = true; render(); say('Wird als gelesen markiert …');
       const result = await markAllRead(items.filter(item => !isHidden(item)));
       busy = false; render();
-      status.textContent = !result.ok ? 'Einige Meldungen konnten nicht als gelesen gespeichert werden. Bitte erneut versuchen.' : result.publicOk ? 'Alle Meldungen sind gelesen.' : 'Alle Meldungen sind gelesen. Öffentliche Lesemarken gelten nur für diese Seitenansicht.';
+      say(!result.ok ? 'Einige Meldungen konnten nicht als gelesen gespeichert werden. Bitte erneut versuchen.' : result.publicOk ? 'Alle Meldungen sind gelesen.' : 'Alle Meldungen sind gelesen. Öffentliche Lesemarken gelten nur für diese Seitenansicht.');
     }
     async function onHideRead() {
       if (busy) return;
       busy = true; render();
       const result = await hideRead(items.filter(item => !isHidden(item)));
       busy = false; render();
-      status.textContent = !result.ok ? 'Einige Meldungen konnten nicht ausgeblendet werden. Bitte erneut versuchen.' : (result.count === 1 ? '1 gelesene Meldung ausgeblendet.' : result.count + ' gelesene Meldungen ausgeblendet.');
+      say(!result.ok ? 'Einige Meldungen konnten nicht ausgeblendet werden. Bitte erneut versuchen.' : (result.count === 1 ? '1 gelesene Meldung ausgeblendet.' : result.count + ' gelesene Meldungen ausgeblendet.'));
     }
     if (hideReadBtn) hideReadBtn.addEventListener('click', onHideRead);
     dialogHideRead.addEventListener('click', onHideRead);
@@ -273,7 +276,7 @@
     failed = feeds.some(result => result.status === 'rejected');
     items = feeds.flatMap(result => result.status === 'fulfilled' && Array.isArray(result.value.items) ? result.value.items : []);
     items.sort((a, b) => String(b.published_at || '').localeCompare(String(a.published_at || '')));
-    if (failed) status.textContent = 'Ein Teil der Benachrichtigungen konnte nicht geladen werden. Bitte die Seite neu laden.';
+    if (failed) say('Ein Teil der Benachrichtigungen konnte nicht geladen werden. Bitte die Seite neu laden.');
     render();
   });
 })();

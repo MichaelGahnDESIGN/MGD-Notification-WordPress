@@ -72,3 +72,6 @@
 .mgd-notification-dialog__content a,.mgd-notification-dialog__link{color:var(--mgd-accent)}
 .mgd-notification-center__list a:focus-visible,.mgd-notification-center__button:focus-visible,.mgd-notification-center button:focus-visible,.mgd-notification-dialog :focus-visible{outline-color:var(--mgd-accent)}
 .mgd-notification-dialog__item[open]{border-color:var(--mgd-accent)}
+/* Status im Fenster */
+.mgd-notification-dialog .mgd-notification-center__status{margin:0 0 .75rem;font-size:.85rem}
+.mgd-notification-center__status:empty{display:none}

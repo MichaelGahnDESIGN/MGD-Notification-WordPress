@@ -33,7 +33,7 @@ MGD Notification Center bringt eine zugängliche Glocke in WordPress. Sie zeigt 
 
 ## Installation
 
-1. Lade [**MGD Notification Center 0.3.0**](https://github.com/MichaelGahnDESIGN/MGD-Notification-WordPress/releases/download/v0.3.0/mgd-notification-center-0.3.0.zip) herunter.
+1. Lade [**MGD Notification Center 0.7.0**](https://github.com/MichaelGahnDESIGN/MGD-Notification-WordPress/releases/download/v0.7.0/mgd-notification-center-0.7.0.zip) herunter.
 2. Öffne in WordPress **Plugins → Installieren → Plugin hochladen**.
 3. Wähle die ZIP-Datei, installiere sie und aktiviere das Plugin.
 4. Stelle unter **Notification Center → Einstellungen** die gewünschte Position ein.
@@ -160,3 +160,8 @@ Beim Erstellen und Bearbeiten einer Meldung gibt es „Inhalt als Modal öffnen�
 - **Eigenes Icon statt Emoji:** Die Glocke ist jetzt ein im Plugin eingebettetes SVG-Icon. Unter „Einstellungen → Icon der Glocke“ stehen 10 Icons zur Auswahl (Glocke, Glocke mit Klang, Megafon, Posteingang und mehr). Es wird nichts von außen geladen.
 - **Behoben:** Bei den schwebenden Platzierungen und im Footer kam das Skript zu spät. Die Glocke blieb dann leer. Jetzt lädt sie überall ihre Meldungen.
 - **Schöneres Backend:** Meldungen und Einstellungen im Karten-Look. Platzierung als Kacheln mit kleiner Vorschau, Anzahl per Regler, Icon-Vorschau oben, Status auf Deutsch, Liste neben dem Formular.
+
+## 0.7.0 – Gleiche Version auf allen Systemen (12.11.2026)
+
+- Die Versionsnummer ist jetzt bei WordPress, JTL-Shop, Shopware und Shopify gleich (0.7.0).
+- Behoben: Fehlermeldungen erscheinen im Fenster „Alle anzeigen“, wenn es offen ist (vorher nur im verdeckten Panel).
