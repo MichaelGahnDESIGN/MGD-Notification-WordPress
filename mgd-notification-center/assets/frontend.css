@@ -63,3 +63,12 @@
 /* SVG Glocke statt Emoji */
 .mgd-notification-center__button{display:inline-grid;place-items:center;padding:0}
 .mgd-notification-center__icon{width:22px;height:22px;display:block}
+/* Akzent blau */
+.mgd-notification-center,.mgd-notification-dialog{--mgd-accent:#2563eb;--mgd-accent-hover:#1d4ed8}
+.mgd-notification-center__show-all{background:var(--mgd-accent);border-color:var(--mgd-accent);color:#fff}
+.mgd-notification-center__show-all:hover{background:var(--mgd-accent-hover)}
+.mgd-notification-center__read-all,.mgd-notification-dialog__read-all{background:#e8efff;border-color:var(--mgd-accent);color:#1e3a8a}
+.mgd-notification-center__hide-read,.mgd-notification-center__hide:hover,.mgd-notification-dialog__hide:hover{border-color:var(--mgd-accent)}
+.mgd-notification-dialog__content a,.mgd-notification-dialog__link{color:var(--mgd-accent)}
+.mgd-notification-center__list a:focus-visible,.mgd-notification-center__button:focus-visible,.mgd-notification-center button:focus-visible,.mgd-notification-dialog :focus-visible{outline-color:var(--mgd-accent)}
+.mgd-notification-dialog__item[open]{border-color:var(--mgd-accent)}

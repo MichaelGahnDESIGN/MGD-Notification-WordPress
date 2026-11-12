@@ -7,7 +7,7 @@ target = Path('dist') / f'mgd-notification-center-{version}.zip'
 target.parent.mkdir(exist_ok=True)
 with zipfile.ZipFile(target, 'w') as archive:
     for path in sorted(root.rglob('*')):
-        if path.is_symlink() or path.suffix == '.log' or path.name == '.DS_Store':
+        if path.is_symlink() or path.suffix == '.log' or any(part.startswith('.') for part in path.relative_to(root).parts):
             continue
         directory = path.is_dir()
         entry = zipfile.ZipInfo(path.as_posix() + ('/' if directory else ''), (2026, 1, 1, 0, 0, 0))
