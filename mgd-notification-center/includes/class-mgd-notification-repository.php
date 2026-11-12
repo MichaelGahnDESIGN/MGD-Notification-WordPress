@@ -105,12 +105,37 @@ final class MGD_Notification_Repository {
     public function personal_feed( int $user_id ): array {
         global $wpdb;
         $now = current_time( 'mysql', true );
-        return $this->display_options( $wpdb->get_results( $wpdb->prepare( "SELECT n.id, n.title, n.message, n.target_url, n.published_at, n.updated_at, r.read_at FROM {$this->notifications_table} n INNER JOIN {$this->recipients_table} r ON r.notification_id = n.id WHERE r.user_id = %d AND r.dismissed_at IS NULL AND n.scope = 'personal' AND n.status = 'published' AND n.published_at <= %s AND (n.expires_at IS NULL OR n.expires_at > %s) ORDER BY n.published_at DESC LIMIT 30", $user_id, $now, $now ), ARRAY_A ) );
+        return $this->display_options( $wpdb->get_results( $wpdb->prepare( "SELECT n.id, n.title, n.message, n.target_url, n.published_at, n.updated_at, r.read_at FROM {$this->notifications_table} n INNER JOIN {$this->recipients_table} r ON r.notification_id = n.id WHERE r.user_id = %d AND r.dismissed_at IS NULL AND n.scope = 'personal' AND n.status = 'published' AND n.published_at <= %s AND (n.expires_at IS NULL OR n.expires_at > %s) ORDER BY n.published_at DESC LIMIT %d", $user_id, $now, $now, MGD_Notification_Plugin::FEED_LIMIT ), ARRAY_A ) );
     }
 
     public function mark_read( int $notification_id, int $user_id ): bool {
         global $wpdb;
         return 0 < (int) $wpdb->update( $this->recipients_table, array( 'read_at' => current_time( 'mysql', true ) ), array( 'notification_id' => $notification_id, 'user_id' => $user_id ), array( '%s' ), array( '%d', '%d' ) );
+    }
+
+    /** Nur eigene, gerade sichtbare Einträge (keine geplanten/abgelaufenen); null bei DB-Fehler. */
+    public function mark_all_read( int $user_id ): ?int {
+        return $this->bulk_update( $user_id, 'r.read_at = %s', 'r.read_at IS NULL' );
+    }
+
+    /** Alle schon gelesenen, sichtbaren eigenen Einträge ausblenden; null bei DB-Fehler. */
+    public function dismiss_read( int $user_id ): ?int {
+        return $this->bulk_update( $user_id, 'r.dismissed_at = %s', 'r.read_at IS NOT NULL' );
+    }
+
+    // gleiche Sichtbarkeit wie personal_feed()
+    private function bulk_update( int $user_id, string $set, string $condition ): ?int {
+        global $wpdb;
+        $now = current_time( 'mysql', true );
+        $result = $wpdb->query( $wpdb->prepare( "UPDATE {$this->recipients_table} r INNER JOIN {$this->notifications_table} n ON n.id = r.notification_id SET {$set} WHERE r.user_id = %d AND {$condition} AND r.dismissed_at IS NULL AND n.scope = 'personal' AND n.status = 'published' AND n.published_at <= %s AND (n.expires_at IS NULL OR n.expires_at > %s)", $now, $user_id, $now, $now ) );
+        return false === $result ? null : (int) $result;
+    }
+
+    /** Ausblenden durch den Nutzer selbst, nur der eigene Empfänger-Eintrag. */
+    public function dismiss( int $notification_id, int $user_id ): bool {
+        global $wpdb;
+        $now = current_time( 'mysql', true );
+        return 0 < (int) $wpdb->query( $wpdb->prepare( "UPDATE {$this->recipients_table} SET dismissed_at = %s, read_at = COALESCE(read_at, %s) WHERE notification_id = %d AND user_id = %d AND dismissed_at IS NULL", $now, $now, $notification_id, $user_id ) );
     }
 
     /** Liefert nur Verwaltungsdaten; persönliche Empfänger werden nie an das öffentliche Frontend gegeben. */

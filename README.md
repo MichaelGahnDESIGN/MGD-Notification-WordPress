@@ -33,7 +33,7 @@ MGD Notification Center bringt eine zugängliche Glocke in WordPress. Sie zeigt 
 
 ## Installation
 
-1. Lade [**MGD Notification Center 0.1.7**](https://github.com/MichaelGahnDESIGN/MGD-Notification-WordPress/releases/download/v0.1.7/mgd-notification-center-0.1.7.zip) herunter.
+1. Lade [**MGD Notification Center 0.3.0**](https://github.com/MichaelGahnDESIGN/MGD-Notification-WordPress/releases/download/v0.3.0/mgd-notification-center-0.3.0.zip) herunter.
 2. Öffne in WordPress **Plugins → Installieren → Plugin hochladen**.
 3. Wähle die ZIP-Datei, installiere sie und aktiviere das Plugin.
 4. Stelle unter **Notification Center → Einstellungen** die gewünschte Position ein.
@@ -148,3 +148,15 @@ Icons und Hintergründe der Karten unter „Weitere Plugins“ kommen jetzt aus 
 Beim Erstellen und Bearbeiten einer Meldung gibt es „Inhalt als Modal öffnen“. Der Dialog zeigt den vollständigen Benachrichtigungstext als Klartext und gegebenenfalls einen normalen Link. Keine fremden Webseiten, Bilder oder Skripte werden eingebettet. Die Option ist standardmäßig aus und wird pro Meldung als nicht automatisch geladene WordPress-Option gespeichert; eine Tabellenmigration ist nicht erforderlich. Sichtbarkeit und Empfängerrechte bleiben in den bisherigen Abfragen erhalten.
 
 Öffentliche Meldungen verwenden einen neuen revisionsbezogenen Browser-Leseschlüssel. Bestehende pauschale Lesemarken älterer Versionen werden nicht übernommen. Datenbank- und Browser-Release sind getrennt von einer Installation auf einer konkreten Website zu prüfen. Der Download-Link oben verweist weiterhin auf die zuletzt veröffentlichte ZIP-Version.
+
+## 0.3.0 – Alle anzeigen, Ausblenden und Divi 5 (12.11.2026)
+
+- **Anzahl im Panel einstellbar:** Unter „Notification Center → Einstellungen“ steht „Anzahl im Panel“ (1 bis 30). So viele aktuelle Meldungen zeigt die Glocke.
+- **Alle anzeigen:** Unten im Panel öffnet ein Fenster mit allen Meldungen. Die Überschriften stehen untereinander. Ein Klick klappt den ganzen Inhalt auf, Links im Text sind klickbar.
+- **Alle gelesen** markiert jetzt wirklich alle Meldungen als gelesen, auch die, die nicht im Panel stehen.
+- **Ausblenden:** Jede Meldung hat einen Knopf „Ausblenden“. „Gelesene ausblenden“ blendet alle schon gelesenen Meldungen auf einmal aus. Persönliche Meldungen merkt sich der Server, öffentliche der Browser.
+- **Divi 5 und andere Page-Builder:** Bei der Platzierung „Im Menü“ kommt die Glocke an das erste Menü der Seite, auch beim Menü-Modul von Divi. Gibt es kein Menü, erscheint sie unten rechts.
+- Die Einstellungen haben deutsche Namen und zeigen nach dem Speichern eine Bestätigung.
+- **Eigenes Icon statt Emoji:** Die Glocke ist jetzt ein im Plugin eingebettetes SVG-Icon. Unter „Einstellungen → Icon der Glocke“ stehen 10 Icons zur Auswahl (Glocke, Glocke mit Klang, Megafon, Posteingang und mehr). Es wird nichts von außen geladen.
+- **Behoben:** Bei den schwebenden Platzierungen und im Footer kam das Skript zu spät. Die Glocke blieb dann leer. Jetzt lädt sie überall ihre Meldungen.
+- **Schöneres Backend:** Meldungen und Einstellungen im Karten-Look. Platzierung als Kacheln mit kleiner Vorschau, Anzahl per Regler, Icon-Vorschau oben, Status auf Deutsch, Liste neben dem Formular.
