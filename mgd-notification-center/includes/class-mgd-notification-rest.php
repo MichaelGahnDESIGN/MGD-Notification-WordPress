@@ -30,11 +30,16 @@ final class MGD_Notification_REST {
     }
 
     public function mark_all_read(): WP_REST_Response {
-        return new WP_REST_Response( array( 'success' => true, 'count' => $this->repository->mark_all_read( get_current_user_id() ) ) );
+        return $this->bulk_response( $this->repository->mark_all_read( get_current_user_id() ) );
     }
 
     public function dismiss_read(): WP_REST_Response {
-        return new WP_REST_Response( array( 'success' => true, 'count' => $this->repository->dismiss_read( get_current_user_id() ) ) );
+        return $this->bulk_response( $this->repository->dismiss_read( get_current_user_id() ) );
+    }
+
+    // DB-Fehler nicht als Erfolg melden
+    private function bulk_response( ?int $count ): WP_REST_Response {
+        return null === $count ? new WP_REST_Response( array( 'success' => false ), 500 ) : new WP_REST_Response( array( 'success' => true, 'count' => $count ) );
     }
 
     public function dismiss( WP_REST_Request $request ): WP_REST_Response {

@@ -129,6 +129,7 @@
     let items = [];
     let busy = false;
     let failed = false;
+    let dialogKeys = null;
 
     const closePanel = () => { panel.hidden = true; bell.setAttribute('aria-expanded', 'false'); };
     bell.addEventListener('click', () => {
@@ -224,9 +225,23 @@
       list.replaceChildren(...visible.slice(0, limit).map(panelItem));
       showAll.hidden = visible.length === 0;
       showAll.textContent = visible.length > limit ? 'Alle anzeigen (' + visible.length + ')' : 'Alle anzeigen';
-      // offene Details im Modal merken
-      const open = new Set([...allList.querySelectorAll('details[open]')].map(d => d.dataset.key));
-      allList.replaceChildren(...visible.map(item => { const d = dialogItem(item); d.open = open.has(d.dataset.key); return d; }));
+      // Modal nur neu bauen wenn sich die Liste ändert, sonst nur Status anpassen (Fokus bleibt)
+      const keys = visible.map(keyOf).join('|');
+      if (keys !== dialogKeys) {
+        const focusKey = dialog.contains(document.activeElement) ? document.activeElement.closest('details')?.dataset.key : null;
+        const open = new Set([...allList.querySelectorAll('details[open]')].map(d => d.dataset.key));
+        allList.replaceChildren(...visible.map(item => { const d = dialogItem(item); d.open = open.has(d.dataset.key); return d; }));
+        dialogKeys = keys;
+        if (focusKey) allList.querySelector('[data-key="' + CSS.escape(focusKey) + '"] summary')?.focus();
+        else if (dialog.open && !dialog.contains(document.activeElement)) closer.focus();
+      } else {
+        visible.forEach(item => {
+          const d = allList.querySelector('[data-key="' + CSS.escape(keyOf(item)) + '"]');
+          if (!d) return;
+          d.classList.toggle('is-read', isRead(item));
+          d.querySelector('summary small').textContent = [formatDate(item.published_at), isRead(item) ? 'Gelesen' : 'Neu'].filter(Boolean).join(' · ');
+        });
+      }
       dialogEmpty.hidden = visible.length > 0;
     }
     views.push(render);

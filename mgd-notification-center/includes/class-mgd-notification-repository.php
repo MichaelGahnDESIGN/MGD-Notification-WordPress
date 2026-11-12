@@ -113,16 +113,22 @@ final class MGD_Notification_Repository {
         return 0 < (int) $wpdb->update( $this->recipients_table, array( 'read_at' => current_time( 'mysql', true ) ), array( 'notification_id' => $notification_id, 'user_id' => $user_id ), array( '%s' ), array( '%d', '%d' ) );
     }
 
-    /** Nur eigene, noch ungelesene Einträge; liefert die Anzahl. */
-    public function mark_all_read( int $user_id ): int {
-        global $wpdb;
-        return (int) $wpdb->query( $wpdb->prepare( "UPDATE {$this->recipients_table} SET read_at = %s WHERE user_id = %d AND read_at IS NULL AND dismissed_at IS NULL", current_time( 'mysql', true ), $user_id ) );
+    /** Nur eigene, gerade sichtbare Einträge (keine geplanten/abgelaufenen); null bei DB-Fehler. */
+    public function mark_all_read( int $user_id ): ?int {
+        return $this->bulk_update( $user_id, 'r.read_at = %s', 'r.read_at IS NULL' );
     }
 
-    /** Alle schon gelesenen eigenen Einträge ausblenden. */
-    public function dismiss_read( int $user_id ): int {
+    /** Alle schon gelesenen, sichtbaren eigenen Einträge ausblenden; null bei DB-Fehler. */
+    public function dismiss_read( int $user_id ): ?int {
+        return $this->bulk_update( $user_id, 'r.dismissed_at = %s', 'r.read_at IS NOT NULL' );
+    }
+
+    // gleiche Sichtbarkeit wie personal_feed()
+    private function bulk_update( int $user_id, string $set, string $condition ): ?int {
         global $wpdb;
-        return (int) $wpdb->query( $wpdb->prepare( "UPDATE {$this->recipients_table} SET dismissed_at = %s WHERE user_id = %d AND read_at IS NOT NULL AND dismissed_at IS NULL", current_time( 'mysql', true ), $user_id ) );
+        $now = current_time( 'mysql', true );
+        $result = $wpdb->query( $wpdb->prepare( "UPDATE {$this->recipients_table} r INNER JOIN {$this->notifications_table} n ON n.id = r.notification_id SET {$set} WHERE r.user_id = %d AND {$condition} AND r.dismissed_at IS NULL AND n.scope = 'personal' AND n.status = 'published' AND n.published_at <= %s AND (n.expires_at IS NULL OR n.expires_at > %s)", $now, $user_id, $now, $now ) );
+        return false === $result ? null : (int) $result;
     }
 
     /** Ausblenden durch den Nutzer selbst, nur der eigene Empfänger-Eintrag. */
