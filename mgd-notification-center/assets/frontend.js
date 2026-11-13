@@ -24,6 +24,9 @@
   const isHidden = item => personal(item) ? personalHidden.has(String(item.id)) : publicHidden.has(publicKey(item));
   const refreshAll = () => views.forEach(fn => fn());
 
+  // angemeldet + gleiche Origin > Nonce auch beim öffentlichen Feed, sonst gilt die Anfrage als anonym (z.B. Wartungsmodus sperrt sie)
+  const sameOrigin = url => { try { return new URL(url, location.href).origin === location.origin; } catch { return false; } };
+  const publicOptions = () => (config.loggedIn && config.nonce && sameOrigin(config.publicUrl) ? { headers: { 'X-WP-Nonce': config.nonce } } : {});
   const request = async (url, options = {}) => {
     const response = await fetch(url, { credentials: 'same-origin', ...options });
     if (!response.ok) throw new Error('Anfrage fehlgeschlagen');
@@ -270,7 +273,7 @@
     showAll.addEventListener('click', () => openDialog(null));
 
     const feeds = await Promise.allSettled([
-      request(config.publicUrl),
+      request(config.publicUrl, publicOptions()),
       config.loggedIn ? request(config.personalUrl, { headers: { 'X-WP-Nonce': config.nonce } }) : Promise.resolve({ items: [] })
     ]);
     failed = feeds.some(result => result.status === 'rejected');
