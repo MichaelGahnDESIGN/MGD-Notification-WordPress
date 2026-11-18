@@ -2,8 +2,8 @@
 /**
  * Plugin Name: MGD Notification Center
  * Plugin URI: https://github.com/MichaelGahnDESIGN/MGD-Notification-WordPress
- * Description: Öffentliche und persönliche Benachrichtigungen ohne externe Dienste.
- * Version: 1.4.0
+ * Description: Öffentliche und persönliche Benachrichtigungen ohne externe Dienste. Meldet sich höchstens einmal am Tag bei theme.michael-gahn.de (Plugin, Version, Shopsystem, Domain, zufällige ID). Abschaltbar in den Einstellungen.
+ * Version: 1.5.0
  * Requires at least: 6.5
  * Requires PHP: 8.1
  * Author: Michael Gahn DESIGN
@@ -16,7 +16,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'MGD_NOTIFICATION_VERSION', '1.4.0' );
+define( 'MGD_NOTIFICATION_VERSION', '1.5.0' );
 define( 'MGD_NOTIFICATION_FILE', __FILE__ );
 define( 'MGD_NOTIFICATION_DIR', plugin_dir_path( __FILE__ ) );
 define( 'MGD_NOTIFICATION_URL', plugin_dir_url( __FILE__ ) );
@@ -32,6 +32,20 @@ require_once MGD_NOTIFICATION_DIR . 'includes/class-mgd-notification-plugin.php'
 
 register_activation_hook( __FILE__, array( 'MGD_Notification_Plugin', 'activate' ) );
 
+// Free-Lizenz Anmeldung > includes/Install (aus MichaThemeV5-Pro erzeugt)
+spl_autoload_register( static function ( string $class ): void {
+    $prefix = 'Mgd\\NotificationCenter\\Install\\';
+    if ( ! str_starts_with( $class, $prefix ) ) {
+        return;
+    }
+    $file = MGD_NOTIFICATION_DIR . 'includes/Install/' . str_replace( '\\', '/', substr( $class, strlen( $prefix ) ) ) . '.php';
+    if ( is_file( $file ) ) {
+        require_once $file;
+    }
+} );
+define( 'MGD_NOTIFICATION_INSTALL_PRODUCT', 'mgd-notification-center-wordpress' );
+\Mgd\NotificationCenter\Install\Platform\WordPress::boot( __FILE__, MGD_NOTIFICATION_INSTALL_PRODUCT, 'wordpress', MGD_NOTIFICATION_VERSION, admin_url( 'admin.php?page=mgd-notification-settings' ) );
+
 MGD_Notification_Plugin::boot();
 
 require_once __DIR__ . '/includes/class-mgd-plugin-admin-tools.php';
@@ -40,8 +54,8 @@ require_once __DIR__ . '/includes/class-mgd-plugin-admin-tools.php';
     'repo' => 'MGD-Notification-WordPress',
     'slug' => 'mgd-notification-center',
     'name' => 'MGD Notification Center',
-    'description' => 'Öffentliche und persönliche Benachrichtigungen ohne externe Dienste.',
-    'version' => '1.4.0',
+    'description' => 'Öffentliche und persönliche Benachrichtigungen ohne externe Dienste. Meldet sich höchstens einmal am Tag bei theme.michael-gahn.de (Plugin, Version, Shopsystem, Domain, zufällige ID). Abschaltbar in den Einstellungen.',
+    'version' => '1.5.0',
     'settings' => 'admin.php?page=mgd-notification-settings',
     'requires' => '6.5',
     'php' => '8.1',

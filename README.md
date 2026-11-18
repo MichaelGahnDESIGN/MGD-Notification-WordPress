@@ -17,7 +17,7 @@
 
 ---
 
-MGD Notification Center bringt eine zugängliche Glocke in WordPress. Sie zeigt neue Inhalte, bewusst angekündigte Aktualisierungen und persönliche Meldungen für angemeldete Konten. Alle Daten bleiben auf dem eigenen WordPress-Server: Das Plugin lädt keine externen Schriften, Skripte oder Analyse-Dienste.
+MGD Notification Center bringt eine zugängliche Glocke in WordPress. Sie zeigt neue Inhalte, bewusst angekündigte Aktualisierungen und persönliche Meldungen für angemeldete Konten. Alle Daten bleiben auf dem eigenen WordPress-Server: Das Plugin lädt keine externen Schriften, Skripte oder Analyse-Dienste. Einzige Ausnahme: Das Plugin meldet sich höchstens einmal am Tag bei theme.michael-gahn.de an (Plugin, Version, Shopsystem, Domain, zufällige ID). Das kannst du unter Notification Center › Einstellungen abschalten.
 
 > **Status:** Erste Testversion. Bitte zuerst in einer Staging- oder Testumgebung installieren.
 
@@ -33,7 +33,7 @@ MGD Notification Center bringt eine zugängliche Glocke in WordPress. Sie zeigt 
 
 ## Installation
 
-1. Lade [**MGD Notification Center 1.4.0**](https://github.com/MichaelGahnDESIGN/MGD-Notification-WordPress/releases/download/v1.4.0/mgd-notification-center-1.4.0.zip) herunter.
+1. Lade [**MGD Notification Center 1.5.0**](https://github.com/MichaelGahnDESIGN/MGD-Notification-WordPress/releases/download/v1.5.0/mgd-notification-center-1.5.0.zip) herunter.
 2. Öffne in WordPress **Plugins → Installieren → Plugin hochladen**.
 3. Wähle die ZIP-Datei, installiere sie und aktiviere das Plugin.
 4. Stelle unter **Notification Center → Einstellungen** die gewünschte Position ein.
@@ -169,6 +169,12 @@ Beim Erstellen und Bearbeiten einer Meldung gibt es „Inhalt als Modal öffnen�
 ## 0.7.1 – Glocke im Wartungsmodus (13.11.2026)
 
 - Behoben: Mit einem Wartungs-Plugin (z. B. MGD Maintenance Studio) fehlten angemeldeten Nutzern die öffentlichen Meldungen, und die Glocke meldete „Ein Teil der Benachrichtigungen konnte nicht geladen werden“. Jetzt schickt die Glocke beim öffentlichen Abruf den WordPress-Sicherheitsschlüssel mit, wenn jemand angemeldet ist (nur an die eigene Website). Besucher ohne Anmeldung sehen im Wartungsmodus weiter nichts.
+
+## 1.5.0 – Anmeldung bei theme.michael-gahn.de (18.11.2026)
+
+- Meldet sich höchstens einmal am Tag bei theme.michael-gahn.de (Plugin, Version, Shopsystem, Domain, zufällige ID). Abschaltbar in den Einstellungen.
+- Das Plugin meldet sich im Admin an, danach höchstens einmal am Tag. Gesendet werden nur Plugin, Version, Shopsystem, Domain und eine zufällige ID.
+- Der Schalter „Installation bei Michael Gahn DESIGN melden“ steht unter Notification Center › Einstellungen. Er ist ab Werk an. Abschalten löscht den Eintrag auf der Plattform. Das Plugin funktioniert dann genauso weiter.
 
 ## 1.4.0 – Versionsangleichung (14.11.2026)
 
