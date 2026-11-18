@@ -96,6 +96,10 @@ final class MGD_Notification_Admin {
             <fieldset class="mgd-notification-admin__icons"><legend class="screen-reader-text">Icon der Glocke</legend><?php foreach ( MGD_Notification_Icons::choices() as $icon => $label ) : ?><label class="mgd-notification-admin__icon"><input type="radio" name="icon" value="<?php echo esc_attr( $icon ); ?>" <?php checked( $settings['icon'], $icon ); ?>><span><?php echo MGD_Notification_Icons::svg( $icon, 'mgd-notification-admin__icon-svg' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?><?php echo esc_html( $label ); ?></span></label><?php endforeach; ?></fieldset>
         </section>
         <?php submit_button( __( 'Einstellungen speichern', 'mgd-notification-center' ), 'primary large' ); ?></form>
+        <?php // Free-Lizenz Schalter, eigenes Formular (nicht im Formular oben) ?>
+        <section class="mgd-notification-admin__card"><div class="mgd-notification-admin__card-head"><h2>Installation melden</h2></div>
+            <?php echo \Mgd\NotificationCenter\Install\Platform\WordPress::settingsHtml( MGD_NOTIFICATION_INSTALL_PRODUCT, 'wordpress', MGD_NOTIFICATION_VERSION ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Settings::render escaped selbst ?>
+        </section>
         <script>
         // Vorschau oben tauscht mit dem gewählten Icon
         document.querySelectorAll('.mgd-notification-admin__icon input').forEach(function (input) {
