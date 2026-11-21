@@ -17,6 +17,7 @@ ok('Baukasten-Updater angemeldet', str_contains($main, "Setup::updater( __FILE__
 ok('alte Reste aufräumen', str_contains($main, "Setup::cleanupLegacy( MGD_NOTIFICATION_PRODUCT, MGD_NOTIFICATION_VERSION, array( 'mgd_admin_release_*' ) )"));
 ok('alter GitHub-Updater abgeschaltet', !str_contains($main, 'MGD_Plugin_Admin_Tools_20261023::register'));
 ok('alter Install-Client raus', !str_contains($main, 'NotificationCenter\\\\Install\\\\') && !is_dir($root . '/includes/Install'));
+ok('alte Katalog-Datei wird nicht mehr geladen (ab 1.6.1)', !str_contains($main, 'class-mgd-wordpress-plugin-catalog.php'));
 ok('alte Katalogseite nicht mehr angemeldet', !preg_match('/new\s+MGD_WordPress_Plugin_Catalog_V4\s*\(/', $admin));
 ok('Dashboard vom Baukasten, Lizenz aus', str_contains($admin, "Setup::dashboard( MGD_NOTIFICATION_PRODUCT, 'wordpress', MGD_NOTIFICATION_VERSION, 'MGD Notification Center', MGD_Notification_Plugin::\$updater, \$list, false, '' )"));
 ok('Weitere Plugins mit eigenem Repo ausgeblendet', str_contains($admin, "Setup::recommendations( MGD_NOTIFICATION_PRODUCT, 'wordpress', 'plugin-notification-wordpress', \$this->fallback_plugins(), 'MGD-Notification-WordPress' )"));
