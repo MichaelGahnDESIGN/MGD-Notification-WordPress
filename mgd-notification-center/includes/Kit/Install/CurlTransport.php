@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mgd\NotificationCenter\Install;
+namespace Mgd\NotificationCenter\Kit\Install;
 
 // cURL: nur https auf theme.michael-gahn.de, keine Weiterleitungen, 3s Verbindung / 5s gesamt, max 64 KB
 final class CurlTransport implements Transport

@@ -2,9 +2,9 @@
 
 declare(strict_types=1);
 
-namespace Mgd\NotificationCenter\Install\Platform;
+namespace Mgd\NotificationCenter\Kit\Install\Platform;
 
-use Mgd\NotificationCenter\Install\{CallbackStore, Factory, InstallClient, Settings};
+use Mgd\NotificationCenter\Kit\Install\{CallbackStore, Factory, InstallClient, Settings};
 
 // WordPress/WooCommerce-Anbindung. Option ohne Autoload, Meldung nur im Admin (admin_init), max 1x am Tag.
 // Update-Prüfung des Plugins: client()->fetchUpdates() statt der festen Datei. Fehler hier dürfen den WP-Admin nie killen

@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mgd\NotificationCenter\Install;
+namespace Mgd\NotificationCenter\Kit\Install;
 
 // HTTP für den Install-Client. Implementierung: nur https, nur unser Host, kurze Zeitgrenzen
 interface Transport
