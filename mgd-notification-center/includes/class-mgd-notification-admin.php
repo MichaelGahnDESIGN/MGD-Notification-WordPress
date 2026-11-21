@@ -10,7 +10,6 @@ final class MGD_Notification_Admin {
         add_action( 'admin_enqueue_scripts', array( $this, 'assets' ) );
         add_action( 'admin_post_mgd_notification_save', array( $this, 'save' ) );
         add_action( 'add_meta_boxes', array( $this, 'meta_box' ) );
-        ( new MGD_WordPress_Plugin_Catalog_V4() )->register( 'mgd-notification-center' );
     }
 
     /** Lädt das ruhige, eigenständige Backend-Design nur im Notification Center. */
@@ -24,6 +23,30 @@ final class MGD_Notification_Admin {
     public function menu(): void {
         add_menu_page( __( 'Notification Center', 'mgd-notification-center' ), __( 'Notification Center', 'mgd-notification-center' ), 'manage_options', 'mgd-notification-center', array( $this, 'notifications_page' ), 'dashicons-bell', 58 );
         add_submenu_page( 'mgd-notification-center', __( 'Einstellungen', 'mgd-notification-center' ), __( 'Einstellungen', 'mgd-notification-center' ), 'manage_options', 'mgd-notification-settings', array( $this, 'settings_page' ) );
+        // Dashboard vom Baukasten: Info, Updates, Weitere Plugins, Installation melden
+        add_submenu_page( 'mgd-notification-center', 'Info und Updates', 'Info und Updates', 'manage_options', 'mgd-notification-plugins', array( $this, 'plugins_page' ) );
+    }
+
+    public function plugins_page(): void {
+        if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Nicht berechtigt.', 'mgd-notification-center' ), '', array( 'response' => 403 ) ); }
+        $list = \Mgd\NotificationCenter\Kit\Platform\WordPress\Setup::recommendations( MGD_NOTIFICATION_PRODUCT, 'wordpress', 'plugin-notification-wordpress', $this->fallback_plugins(), 'MGD-Notification-WordPress' );
+        // parent leer = kein eigener Menüpunkt, Lizenz bleibt aus
+        $dash = \Mgd\NotificationCenter\Kit\Platform\WordPress\Setup::dashboard( MGD_NOTIFICATION_PRODUCT, 'wordpress', MGD_NOTIFICATION_VERSION, 'MGD Notification Center', MGD_Notification_Plugin::$updater, $list, false, '' );
+        if ( null === $dash ) { echo '<div class="wrap"><p>Die Seite konnte gerade nicht geladen werden.</p></div>'; return; }
+        $dash->page();
+    }
+
+    /** Ersatzliste aus plugin-catalog/plugins.json, falls theme.michael-gahn.de nicht antwortet. */
+    private function fallback_plugins(): array {
+        $raw = file_get_contents( MGD_NOTIFICATION_DIR . 'includes/plugin-catalog/plugins.json' );
+        $data = is_string( $raw ) ? json_decode( $raw, true ) : null;
+        $out = array();
+        foreach ( is_array( $data ) ? $data : array() as $row ) {
+            if ( is_array( $row ) && ! empty( $row['slug'] ) ) {
+                $out[] = array( 'slug' => (string) $row['slug'], 'name' => (string) ( $row['name'] ?? '' ), 'description' => (string) ( $row['description'] ?? '' ), 'version' => '' );
+            }
+        }
+        return $out;
     }
 
     /** Status mit deutschen Namen */
@@ -96,10 +119,6 @@ final class MGD_Notification_Admin {
             <fieldset class="mgd-notification-admin__icons"><legend class="screen-reader-text">Icon der Glocke</legend><?php foreach ( MGD_Notification_Icons::choices() as $icon => $label ) : ?><label class="mgd-notification-admin__icon"><input type="radio" name="icon" value="<?php echo esc_attr( $icon ); ?>" <?php checked( $settings['icon'], $icon ); ?>><span><?php echo MGD_Notification_Icons::svg( $icon, 'mgd-notification-admin__icon-svg' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?><?php echo esc_html( $label ); ?></span></label><?php endforeach; ?></fieldset>
         </section>
         <?php submit_button( __( 'Einstellungen speichern', 'mgd-notification-center' ), 'primary large' ); ?></form>
-        <?php // Free-Lizenz Schalter, eigenes Formular (nicht im Formular oben) ?>
-        <section class="mgd-notification-admin__card"><div class="mgd-notification-admin__card-head"><h2>Installation melden</h2></div>
-            <?php echo \Mgd\NotificationCenter\Install\Platform\WordPress::settingsHtml( MGD_NOTIFICATION_INSTALL_PRODUCT, 'wordpress', MGD_NOTIFICATION_VERSION ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Settings::render escaped selbst ?>
-        </section>
         <script>
         // Vorschau oben tauscht mit dem gewählten Icon
         document.querySelectorAll('.mgd-notification-admin__icon input').forEach(function (input) {

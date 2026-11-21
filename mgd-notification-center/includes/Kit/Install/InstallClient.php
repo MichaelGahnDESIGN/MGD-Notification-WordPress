@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mgd\NotificationCenter\Install;
+namespace Mgd\NotificationCenter\Kit\Install;
 
 // Free-Lizenz Anmeldung + Aktiv-Meldung (docs/plans/FREE-LIZENZEN-PLAN.md). Läuft nur im Admin, nie im Shop-Frontend.
 // Fehler werden geschluckt, das Plugin funktioniert immer voll weiter

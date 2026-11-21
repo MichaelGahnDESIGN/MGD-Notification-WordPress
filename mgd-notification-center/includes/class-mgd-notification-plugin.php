@@ -5,6 +5,8 @@ defined( 'ABSPATH' ) || exit;
 final class MGD_Notification_Plugin {
     /** Höchstzahl je Liste, gilt auch für „Alle anzeigen“. */
     public const FEED_LIMIT = 30;
+    // Updater vom Baukasten, fürs Dashboard
+    public static ?\Mgd\NotificationCenter\Kit\Platform\WordPress\Updater $updater = null;
 
     public static function boot(): void {
         add_action( 'plugins_loaded', array( __CLASS__, 'load' ) );

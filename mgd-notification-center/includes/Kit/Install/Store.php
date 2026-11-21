@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Mgd\NotificationCenter\Install;
+namespace Mgd\NotificationCenter\Kit\Install;
 
 // Kleiner Zustand: report, install_id, key, last_ping, fails, next_try
 interface Store

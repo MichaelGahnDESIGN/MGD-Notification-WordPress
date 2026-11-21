@@ -18,6 +18,6 @@ jobs:
       - run: find mgd-notification-center -name '*.php' -exec php -l {} \;
       - run: node --check mgd-notification-center/assets/frontend.js
       - run: php tests/renderer-placement.php
-      - run: php tests/install-client.php
+      - run: php tests/kit-bridge.php
       - run: python3 scripts/check-docs.py
       - run: python3 scripts/build-package.py

@@ -17,7 +17,7 @@
 
 ---
 
-MGD Notification Center bringt eine zugängliche Glocke in WordPress. Sie zeigt neue Inhalte, bewusst angekündigte Aktualisierungen und persönliche Meldungen für angemeldete Konten. Alle Daten bleiben auf dem eigenen WordPress-Server: Das Plugin lädt keine externen Schriften, Skripte oder Analyse-Dienste. Einzige Ausnahme: Das Plugin meldet sich höchstens einmal am Tag bei theme.michael-gahn.de an (Plugin, Version, Shopsystem, Domain, zufällige ID). Das kannst du unter Notification Center › Einstellungen abschalten.
+MGD Notification Center bringt eine zugängliche Glocke in WordPress. Sie zeigt neue Inhalte, bewusst angekündigte Aktualisierungen und persönliche Meldungen für angemeldete Konten. Alle Daten bleiben auf dem eigenen WordPress-Server: Das Plugin lädt keine externen Schriften, Skripte oder Analyse-Dienste. Einzige Ausnahme: Das Plugin meldet sich höchstens einmal am Tag bei theme.michael-gahn.de an (Plugin, Version, Shopsystem, Domain, zufällige ID). Das kannst du unter Notification Center › Info und Updates abschalten.
 
 > **Status:** Erste Testversion. Bitte zuerst in einer Staging- oder Testumgebung installieren.
 
@@ -33,7 +33,7 @@ MGD Notification Center bringt eine zugängliche Glocke in WordPress. Sie zeigt 
 
 ## Installation
 
-1. Lade [**MGD Notification Center 1.5.0**](https://github.com/MichaelGahnDESIGN/MGD-Notification-WordPress/releases/download/v1.5.0/mgd-notification-center-1.5.0.zip) herunter.
+1. Lade [**MGD Notification Center 1.6.0**](https://github.com/MichaelGahnDESIGN/MGD-Notification-WordPress/releases/download/v1.6.0/mgd-notification-center-1.6.0.zip) herunter.
 2. Öffne in WordPress **Plugins → Installieren → Plugin hochladen**.
 3. Wähle die ZIP-Datei, installiere sie und aktiviere das Plugin.
 4. Stelle unter **Notification Center → Einstellungen** die gewünschte Position ein.
@@ -169,6 +169,14 @@ Beim Erstellen und Bearbeiten einer Meldung gibt es „Inhalt als Modal öffnen�
 ## 0.7.1 – Glocke im Wartungsmodus (13.11.2026)
 
 - Behoben: Mit einem Wartungs-Plugin (z. B. MGD Maintenance Studio) fehlten angemeldeten Nutzern die öffentlichen Meldungen, und die Glocke meldete „Ein Teil der Benachrichtigungen konnte nicht geladen werden“. Jetzt schickt die Glocke beim öffentlichen Abruf den WordPress-Sicherheitsschlüssel mit, wenn jemand angemeldet ist (nur an die eigene Website). Besucher ohne Anmeldung sehen im Wartungsmodus weiter nichts.
+
+## 1.6.0 – Updates und Infos über theme.michael-gahn.de (21.11.2026)
+
+- Neue Seite **Notification Center › Info und Updates**. Dort stehen die Version, ob es ein Update gibt, die Liste „Weitere Plugins“ und der Schalter „Installation melden“.
+- Updates kommen jetzt von theme.michael-gahn.de. Vor der Installation prüft das Plugin Größe und Prüfsumme der ZIP-Datei. Automatische Updates bleiben aus, bis du sie selbst einschaltest.
+- Der alte Update-Weg über GitHub ist abgeschaltet. Ältere Versionen finden dieses Update trotzdem noch über GitHub.
+- Beim Löschen des Plugins meldet es sich bei theme.michael-gahn.de ab. Deine Meldungen und Einstellungen bleiben, außer du hast das vollständige Löschen eingeschaltet.
+- Deine Einstellungen und Meldungen bleiben beim Update erhalten.
 
 ## 1.5.0 – Anmeldung bei theme.michael-gahn.de (18.11.2026)
 
