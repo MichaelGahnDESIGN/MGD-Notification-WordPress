@@ -10,6 +10,16 @@ final class MGD_Notification_Admin {
         add_action( 'admin_enqueue_scripts', array( $this, 'assets' ) );
         add_action( 'admin_post_mgd_notification_save', array( $this, 'save' ) );
         add_action( 'add_meta_boxes', array( $this, 'meta_box' ) );
+        // Installieren-Knopf Weitere Plugins, muss vor admin-post.php angemeldet sein
+        add_action( 'admin_init', array( $this, 'catalog_actions' ) );
+    }
+
+    public function catalog_actions(): void {
+        \Mgd\NotificationCenter\Kit\Platform\WordPress\Setup::catalogActions( MGD_NOTIFICATION_PRODUCT, $this->recommendations(), admin_url( 'admin.php?page=mgd-notification-plugins' ) );
+    }
+
+    private function recommendations(): ?\Mgd\NotificationCenter\Kit\Catalog\Recommendations {
+        return \Mgd\NotificationCenter\Kit\Platform\WordPress\Setup::recommendations( MGD_NOTIFICATION_PRODUCT, 'wordpress', 'plugin-notification-wordpress', $this->fallback_plugins(), 'MGD-Notification-WordPress' );
     }
 
     /** Lädt das ruhige, eigenständige Backend-Design nur im Notification Center. */
@@ -29,7 +39,7 @@ final class MGD_Notification_Admin {
 
     public function plugins_page(): void {
         if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Nicht berechtigt.', 'mgd-notification-center' ), '', array( 'response' => 403 ) ); }
-        $list = \Mgd\NotificationCenter\Kit\Platform\WordPress\Setup::recommendations( MGD_NOTIFICATION_PRODUCT, 'wordpress', 'plugin-notification-wordpress', $this->fallback_plugins(), 'MGD-Notification-WordPress' );
+        $list = $this->recommendations();
         // parent leer = kein eigener Menüpunkt, Lizenz bleibt aus
         $dash = \Mgd\NotificationCenter\Kit\Platform\WordPress\Setup::dashboard( MGD_NOTIFICATION_PRODUCT, 'wordpress', MGD_NOTIFICATION_VERSION, 'MGD Notification Center', MGD_Notification_Plugin::$updater, $list, false, '' );
         if ( null === $dash ) { echo '<div class="wrap"><p>Die Seite konnte gerade nicht geladen werden.</p></div>'; return; }

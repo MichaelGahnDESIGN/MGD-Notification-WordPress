@@ -33,7 +33,7 @@ MGD Notification Center bringt eine zugängliche Glocke in WordPress. Sie zeigt 
 
 ## Installation
 
-1. Lade [**MGD Notification Center 1.6.1**](https://github.com/MichaelGahnDESIGN/MGD-Notification-WordPress/releases/download/v1.6.1/mgd-notification-center-1.6.1.zip) herunter.
+1. Lade [**MGD Notification Center 1.6.2**](https://github.com/MichaelGahnDESIGN/MGD-Notification-WordPress/releases/download/v1.6.2/mgd-notification-center-1.6.2.zip) herunter.
 2. Öffne in WordPress **Plugins → Installieren → Plugin hochladen**.
 3. Wähle die ZIP-Datei, installiere sie und aktiviere das Plugin.
 4. Stelle unter **Notification Center → Einstellungen** die gewünschte Position ein.
@@ -169,6 +169,12 @@ Beim Erstellen und Bearbeiten einer Meldung gibt es „Inhalt als Modal öffnen�
 ## 0.7.1 – Glocke im Wartungsmodus (13.11.2026)
 
 - Behoben: Mit einem Wartungs-Plugin (z. B. MGD Maintenance Studio) fehlten angemeldeten Nutzern die öffentlichen Meldungen, und die Glocke meldete „Ein Teil der Benachrichtigungen konnte nicht geladen werden“. Jetzt schickt die Glocke beim öffentlichen Abruf den WordPress-Sicherheitsschlüssel mit, wenn jemand angemeldet ist (nur an die eigene Website). Besucher ohne Anmeldung sehen im Wartungsmodus weiter nichts.
+
+## 1.6.2 – Neue Ansicht „Weitere Plugins“ (22.11.2026)
+
+- „Weitere Plugins“ (unter Notification Center → Info und Updates) hat jetzt das Design der MGD Plugin-Kollektion: Bilder, Kategorien, Suche, Filter und ein Details-Fenster.
+- Kostenlose Plugins kannst du dort mit einem Klick installieren. Sie werden nie automatisch aktiviert.
+- Die alte Seite „Weitere Plugins“ ist ganz entfernt.
 
 ## 1.6.1 – Aufgeräumt (21.11.2026)
 
