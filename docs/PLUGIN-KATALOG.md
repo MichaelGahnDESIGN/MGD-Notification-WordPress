@@ -1,5 +1,7 @@
 # Plugin-Kollektion im WordPress-Backend
 
+> **Ab Version 1.6.2 veraltet.** Die alte Seite ist entfernt. „Weitere Plugins“ kommt jetzt aus dem Plugin-Baukasten (Notification Center → Info und Updates). Dieser Text bleibt nur als Verlauf stehen.
+
 Die GitHub-Ausgabe erhält einen gemeinsamen, lokal gerenderten Katalog. Die getrennten WordPress.org-Einreichungskandidaten bleiben unverändert und enthalten diesen externen Katalog nicht.
 
 ## Gestaltungsvertrag

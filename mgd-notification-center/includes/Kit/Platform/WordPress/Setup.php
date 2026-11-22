@@ -164,6 +164,29 @@ final class Setup
         }
     }
 
+    // Pro-Pakete vom Server (ProContentClient), nutzt den Schlüssel vom Lizenz-Baustein, Standard AUS
+    // $keys = fest eingebaute öffentliche Schlüssel kid => base64 (docs/PRO-CONTENT-API.md)
+    /** @param array<string,string> $keys */
+    public static function proContent(string $product, string $platform, array $keys, bool $enabled = false): \Mgd\NotificationCenter\Kit\License\ProContentClient
+    {
+        $off = static fn (): \Mgd\NotificationCenter\Kit\License\ProContentClient => new \Mgd\NotificationCenter\Kit\License\ProContentClient(null, new CallbackStore(static fn (): mixed => '', static function (string $v): void {
+        }), '', [], false);
+        try {
+            if (!$enabled || preg_match(self::PRODUCT_RE, $product) !== 1) {
+                return $off();
+            }
+            $opt = 'mgd_kit_lic_' . str_replace('-', '_', $product);
+            // nur lesen, schreiben macht der LicenseClient
+            $store = new CallbackStore(static fn (): mixed => \get_option($opt, ''), static function (string $v): void {
+            });
+            $domain = strtolower((string) \wp_parse_url(\home_url(), PHP_URL_HOST));
+
+            return new \Mgd\NotificationCenter\Kit\License\ProContentClient(new CurlPost('MGDKit/1.0 (' . $platform . ')', \Mgd\NotificationCenter\Kit\License\ProContentClient::MAX_BYTES, \Mgd\NotificationCenter\Kit\License\ProContentClient::TIMEOUT), $store, $domain, $keys, true);
+        } catch (\Throwable) {
+            return $off();
+        }
+    }
+
     /**
      * Admin-Seite mit allen Bereichen. $parent = options-general.php (Einstellungen) oder eigener Menü-Slug, '' = kein Menüpunkt
      * Speichern von "Installation melden" läuft über WordPress::boot(), das startet updater() bzw. boot() schon
@@ -191,10 +214,27 @@ final class Setup
             if ($parent !== '') {
                 $d->register($parent);
             }
+            self::catalogActions($product, $recommendations, $parent !== '' ? self::dashboardUrl($product, $parent) : '');
 
             return $d;
         } catch (\Throwable) {
             return null;
+        }
+    }
+
+    /**
+     * Knopf "Installieren" bei Weitere Plugins anmelden (admin-post.php). Setup::dashboard macht das schon
+     * nur nötig, wenn du RecommendationsView::render($liste, $product) auf einer eigenen Seite ausgibst
+     */
+    public static function catalogActions(string $product, ?Recommendations $recommendations, string $returnUrl = ''): void
+    {
+        try {
+            if ($recommendations === null || preg_match(self::PRODUCT_RE, $product) !== 1) {
+                return;
+            }
+            $i = new CatalogInstaller($product, $recommendations, $returnUrl);
+            \add_action('admin_post_' . CatalogInstaller::action($product), [$i, 'handle']);
+        } catch (\Throwable) {
         }
     }
 

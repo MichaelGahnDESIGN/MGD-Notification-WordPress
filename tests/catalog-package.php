@@ -12,21 +12,13 @@ $metadata = json_decode(file_get_contents($runtime . '/includes/plugin-catalog/p
 mgd_catalog_assert(count($metadata) === 7, 'Sieben bekannte WordPress-Plugins');
 foreach ($metadata as $repo => $item) {
     mgd_catalog_assert($item['repository'] === $repo && $item['tier'] === 'free', 'Bekannte kostenlose Einträge');
-    $file = $runtime . '/assets/plugin-catalog/icons/' . $item['icon'];
-    mgd_catalog_assert(is_file($file) && filesize($file) > 100, 'Lokales Icon ' . $repo);
-    mgd_catalog_assert(!str_contains(file_get_contents($file), 'https://'), 'Kein externer Bildabruf im Icon');
-    $picture = $runtime . '/assets/plugin-catalog/backgrounds/' . pathinfo($item['icon'], PATHINFO_FILENAME) . '.webp';
-    $size = is_file($picture) ? getimagesize($picture) : false;
-    mgd_catalog_assert($size && $size[0] === 1080 && $size[1] === 360 && $size['mime'] === 'image/webp', 'Lokales Kartenmotiv ' . $repo);
-    mgd_catalog_assert(filesize($picture) < 80000, 'Kompaktes Kartenmotiv ' . $repo);
 }
-foreach (array('class-provider.php', 'view.php', 'plugins.json') as $name) {
-    mgd_catalog_assert(is_file($runtime . '/includes/plugin-catalog/' . $name), 'Katalogbestandteil ' . $name);
-}
+// ab 1.6.2 alte Katalogseite weg, Bilder kommen vom Baukasten
+mgd_catalog_assert(!is_file($runtime . '/includes/plugin-catalog/class-provider.php') && !is_dir($runtime . '/assets/plugin-catalog'), 'Alte Katalogseite entfernt');
 $bootstrap = $main;
 foreach (glob($runtime . '/includes/*.php') as $file) { $bootstrap .= file_get_contents($file); }
 // ab 1.6.0: Weitere Plugins über den Baukasten (Dashboard), alter GitHub-Updater nicht mehr angemeldet
 mgd_catalog_assert(str_contains($bootstrap, 'Setup::recommendations(') && str_contains($bootstrap, 'Setup::dashboard('), 'Weitere Plugins über das Baukasten-Dashboard');
 mgd_catalog_assert(!str_contains($main, 'MGD_Plugin_Admin_Tools_20261023::register'), 'Alter GitHub-Updater abgeschaltet');
 mgd_catalog_assert(is_file($runtime . '/includes/Kit/Platform/WordPress/Updater.php'), 'Baukasten vorhanden');
-echo "PASS Pluginversion, sieben Katalogeinträge, lokale Icons und vollständige Laufzeitdateien\n";
+echo "PASS Pluginversion, sieben Katalogeinträge, Baukasten statt alter Katalogseite\n";

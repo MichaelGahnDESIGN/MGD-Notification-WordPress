@@ -18,6 +18,9 @@ ok('alte Reste aufräumen', str_contains($main, "Setup::cleanupLegacy( MGD_NOTIF
 ok('alter GitHub-Updater abgeschaltet', !str_contains($main, 'MGD_Plugin_Admin_Tools_20261023::register'));
 ok('alter Install-Client raus', !str_contains($main, 'NotificationCenter\\\\Install\\\\') && !is_dir($root . '/includes/Install'));
 ok('alte Katalog-Datei wird nicht mehr geladen (ab 1.6.1)', !str_contains($main, 'class-mgd-wordpress-plugin-catalog.php'));
+ok('alte Katalogseite ganz raus (ab 1.6.2)', !is_file($root . '/includes/class-mgd-wordpress-plugin-catalog.php') && !is_file($root . '/includes/plugin-catalog/class-provider.php') && !is_dir($root . '/assets/plugin-catalog'));
+ok('Ersatzliste plugins.json bleibt', is_file($root . '/includes/plugin-catalog/plugins.json'));
+ok('Installieren-Knopf bei admin_init angemeldet', str_contains($admin, "add_action( 'admin_init', array( \$this, 'catalog_actions' ) )") && str_contains($admin, "Setup::catalogActions( MGD_NOTIFICATION_PRODUCT, \$this->recommendations(), admin_url( 'admin.php?page=mgd-notification-plugins' ) )"));
 ok('alte Katalogseite nicht mehr angemeldet', !preg_match('/new\s+MGD_WordPress_Plugin_Catalog_V4\s*\(/', $admin));
 ok('Dashboard vom Baukasten, Lizenz aus', str_contains($admin, "Setup::dashboard( MGD_NOTIFICATION_PRODUCT, 'wordpress', MGD_NOTIFICATION_VERSION, 'MGD Notification Center', MGD_Notification_Plugin::\$updater, \$list, false, '' )"));
 ok('Weitere Plugins mit eigenem Repo ausgeblendet', str_contains($admin, "Setup::recommendations( MGD_NOTIFICATION_PRODUCT, 'wordpress', 'plugin-notification-wordpress', \$this->fallback_plugins(), 'MGD-Notification-WordPress' )"));
@@ -26,7 +29,7 @@ ok('kein zweiter Install-Schalter in den Einstellungen', !str_contains($admin, '
 $pos = strpos($uninstall, "Setup::uninstall( 'mgd-notification-center-wordpress', 'wordpress' )");
 ok('uninstall.php meldet ab', $pos !== false);
 ok('Abmelden vor der Daten-Abfrage', $pos !== false && $pos < (int) strpos($uninstall, 'mgd_notification_delete_data_on_uninstall'));
-foreach (['Platform/WordPress/Setup.php', 'Platform/WordPress/Updater.php', 'Platform/WordPress/Dashboard.php', 'Install/InstallClient.php', 'Platform/WordPress/assets/kit-admin.css'] as $f) {
+foreach (['Platform/WordPress/Setup.php', 'Platform/WordPress/Updater.php', 'Platform/WordPress/Dashboard.php', 'Install/InstallClient.php', 'Platform/WordPress/assets/kit-admin.css', 'Platform/WordPress/CatalogInstaller.php', 'Platform/WordPress/assets/kit-catalog.css', 'Platform/WordPress/assets/kit-catalog.js'] as $f) {
     ok('Baukasten-Datei ' . $f, is_file($root . '/includes/Kit/' . $f));
 }
 $ns = true;
