@@ -1,8 +1,8 @@
 <?php
 /**
  * Plugin Name: MGD Notification Center
- * Plugin URI: https://github.com/MichaelGahnDESIGN/MGD-Notification-WordPress
- * Description: Öffentliche und persönliche Benachrichtigungen ohne externe Dienste. Meldet sich höchstens einmal am Tag bei theme.michael-gahn.de (Plugin, Version, Shopsystem, Domain, zufällige ID). Abschaltbar in den Einstellungen.
+ * Plugin URI: https://theme.michael-gahn.de/plugins/plugin-notification-wordpress
+ * Description: Öffentliche und persönliche Benachrichtigungen ohne externe Dienste.
  * Version: 1.6.2
  * Requires at least: 6.5
  * Requires PHP: 8.1
@@ -45,8 +45,15 @@ spl_autoload_register( static function ( string $class ): void {
 } );
 define( 'MGD_NOTIFICATION_PRODUCT', 'mgd-notification-center-wordpress' );
 
-// Updater vom Baukasten, startet auch den Install-Melder - alter GitHub-Updater (Admin-Tools) ist raus
-MGD_Notification_Plugin::$updater = \Mgd\NotificationCenter\Kit\Platform\WordPress\Setup::updater( __FILE__, MGD_NOTIFICATION_PRODUCT, 'wordpress', MGD_NOTIFICATION_VERSION, 'MGD Notification Center', admin_url( 'admin.php?page=mgd-notification-plugins' ) );
+// Updater vom Baukasten, startet auch den Install-Melder
+$mgd_nc_updater = \Mgd\NotificationCenter\Kit\Platform\WordPress\Setup::updater( __FILE__, 'mgd-notification-center-wordpress', 'wordpress', MGD_NOTIFICATION_VERSION, 'MGD Notification Center', \Mgd\NotificationCenter\Kit\Platform\WordPress\Tools::url() );
+MGD_Notification_Plugin::$updater = $mgd_nc_updater;
+// MGD Tools - eigenes Menü ist raus, Seiten-Kennung bleibt
+\Mgd\NotificationCenter\Kit\Platform\WordPress\Setup::tools( __FILE__, 'mgd-notification-center-wordpress', 'wordpress', MGD_NOTIFICATION_VERSION, 'MGD Notification Center', $mgd_nc_updater, array(
+    'slug'     => 'plugin-notification-wordpress',
+    'repo'     => 'MGD-Notification-WordPress',
+    'settings' => array( 'page' => 'mgd-notification-center', 'title' => 'Notification Center', 'cap' => 'manage_options', 'render' => static function (): void { ( new MGD_Notification_Admin( new MGD_Notification_Repository() ) )->page(); } ),
+    'license'  => false,
+) );
 // Reste vom alten Updater wegräumen, 1x pro Version
 \Mgd\NotificationCenter\Kit\Platform\WordPress\Setup::cleanupLegacy( MGD_NOTIFICATION_PRODUCT, MGD_NOTIFICATION_VERSION, array( 'mgd_admin_release_*' ) );
-

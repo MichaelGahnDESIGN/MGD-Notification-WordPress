@@ -11,10 +11,14 @@ use Mgd\NotificationCenter\Kit\Support\Text;
 // 15 Min Cache, 5 Min Pause nach Fehler, letzte gute Liste 7 Tage, sonst die mitgelieferte Liste. Wirft nie
 final class Recommendations
 {
+    // Repos mit mehreren Plugins (JTL-Sammelrepo) > Repo sagt nix übers eigene Plugin
+    public const SHARED_REPOS = ['michathemev5_jtl-shop-5'];
     public const URL_PREFIX = 'https://theme.michael-gahn.de/api/v1/recommendations/';
     public const DETAILS_PREFIX = 'https://theme.michael-gahn.de/plugins/';
     public const CATALOG_PREFIX = 'https://theme.michael-gahn.de/downloads?plattform=';
     public const TTL = 900;
+    // Speicher-Format: alter Speicher (ohne Bilder/Kategorien) gilt nach Update nicht mehr als frisch > sofort neu holen
+    public const FORMAT = 2;
     public const PAUSE = 300;
     public const STALE_MAX = 604800;
     public const MAX_ITEMS = 80;
@@ -153,13 +157,14 @@ final class Recommendations
         $st = $this->state();
         $at = (int) ($st['rec_at'] ?? 0);
         $has = is_array($st['rec_items'] ?? null);
-        if ($has && $at <= $now && $now - $at < self::TTL) {
+        $fresh = (int) ($st['rec_fmt'] ?? 0) === self::FORMAT;
+        if ($has && $fresh && $at <= $now && $now - $at < self::TTL) {
             return ['items' => $this->clean($st['rec_items']), 'source' => 'cache', 'checkedAt' => $at];
         }
         if ((int) ($st['rec_pause'] ?? 0) <= $now) {
             $items = $this->fetch();
             if ($items !== null) {
-                $this->save(['rec_items' => $items, 'rec_at' => $now]);
+                $this->save(['rec_items' => $items, 'rec_at' => $now, 'rec_fmt' => self::FORMAT]);
 
                 return ['items' => $items, 'source' => 'fresh', 'checkedAt' => $now];
             }
@@ -278,10 +283,10 @@ final class Recommendations
         return array_slice($out, 0, self::MAX_BASENAMES);
     }
 
-    // alte Listen ohne Katalog-Kennung > eigenes Plugin übers Repo erkennen
+    // alte Listen ohne Katalog-Kennung > eigenes Plugin übers Repo erkennen. Sammelrepos nie (sonst fliegen Suche + Notification mit raus, Befund theme)
     private function isSelfRepo(array $row): bool
     {
-        if ($this->selfRepo === '') {
+        if ($this->selfRepo === '' || in_array($this->selfRepo, self::SHARED_REPOS, true)) {
             return false;
         }
         foreach (self::REPO_FIELDS as $f) {
