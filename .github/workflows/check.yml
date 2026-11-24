@@ -6,7 +6,7 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       # `actions/setup-php` existiert nicht. Der Commit ist auf setup-php 2.37.2 gepinnt,
       # damit die PHP-8.1-Prüfung reproduzierbar bleibt und keine bewegliche Action-Referenz lädt.
       - uses: shivammathur/setup-php@eb7c497e18156a6bbabfef1d3a82760b9eda3962 # v2.40.0
