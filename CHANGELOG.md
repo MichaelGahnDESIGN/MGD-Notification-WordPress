@@ -2,11 +2,11 @@
 
 Alle Änderungen am MGD Notification Center für WordPress, neueste zuerst.
 
-## Unveröffentlicht – MGD Tools
+## [2.1.1] - 2026-11-24
 
+- Gemeinsame Verwaltung unter MGD Tools, einheitliche Darstellung, Icons.
 - Das Notification Center hängt jetzt unter dem Menüpunkt „MGD Tools“. Meldungen und Einstellungen sind zwei Reiter auf einer Seite.
 - Info, Updates, Lizenz und Weitere Plugins stehen zentral unter „MGD Tools“.
-- Neue Icons (128 und 256 Pixel) und genormter Plugin-Kopf.
 - Alter Update-Code und alte Plugin-Kollektion sind entfernt.
 
 ## 1.6.2 – Neue Ansicht „Weitere Plugins“ (22.11.2026)
