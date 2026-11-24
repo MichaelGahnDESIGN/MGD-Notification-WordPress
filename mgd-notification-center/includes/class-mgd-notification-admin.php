@@ -6,20 +6,19 @@ final class MGD_Notification_Admin {
     public function __construct( private MGD_Notification_Repository $repository ) {}
 
     public function register(): void {
-        add_action( 'admin_menu', array( $this, 'menu' ) );
+        // alte Seiten-Links auf neue Seite mit Reiter umleiten
+        add_action( 'admin_init', array( $this, 'legacy_redirect' ) );
         add_action( 'admin_enqueue_scripts', array( $this, 'assets' ) );
         add_action( 'admin_post_mgd_notification_save', array( $this, 'save' ) );
         add_action( 'add_meta_boxes', array( $this, 'meta_box' ) );
-        // Installieren-Knopf Weitere Plugins, muss vor admin-post.php angemeldet sein
-        add_action( 'admin_init', array( $this, 'catalog_actions' ) );
     }
 
-    public function catalog_actions(): void {
-        \Mgd\NotificationCenter\Kit\Platform\WordPress\Setup::catalogActions( MGD_NOTIFICATION_PRODUCT, $this->recommendations(), admin_url( 'admin.php?page=mgd-notification-plugins' ) );
-    }
-
-    private function recommendations(): ?\Mgd\NotificationCenter\Kit\Catalog\Recommendations {
-        return \Mgd\NotificationCenter\Kit\Platform\WordPress\Setup::recommendations( MGD_NOTIFICATION_PRODUCT, 'wordpress', 'plugin-notification-wordpress', $this->fallback_plugins(), 'MGD-Notification-WordPress' );
+    public function legacy_redirect(): void {
+        $page = isset( $_GET['page'] ) ? sanitize_key( wp_unslash( $_GET['page'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification
+        $map = array( 'mgd-notification-settings' => 'settings', 'mgd-notification-plugins' => '' );
+        if ( ! isset( $map[ $page ] ) ) { return; }
+        if ( 'mgd-notification-plugins' === $page ) { wp_safe_redirect( admin_url( 'admin.php?page=mgd-tools' ) ); exit; }
+        wp_safe_redirect( admin_url( 'admin.php?page=mgd-notification-center&tab=settings' ) ); exit;
     }
 
     /** Lädt das ruhige, eigenständige Backend-Design nur im Notification Center. */
@@ -30,33 +29,17 @@ final class MGD_Notification_Admin {
         wp_enqueue_style( 'mgd-notification-admin', MGD_NOTIFICATION_URL . 'assets/admin.css', array(), MGD_NOTIFICATION_VERSION );
     }
 
-    public function menu(): void {
-        add_menu_page( __( 'Notification Center', 'mgd-notification-center' ), __( 'Notification Center', 'mgd-notification-center' ), 'manage_options', 'mgd-notification-center', array( $this, 'notifications_page' ), 'dashicons-bell', 58 );
-        add_submenu_page( 'mgd-notification-center', __( 'Einstellungen', 'mgd-notification-center' ), __( 'Einstellungen', 'mgd-notification-center' ), 'manage_options', 'mgd-notification-settings', array( $this, 'settings_page' ) );
-        // Dashboard vom Baukasten: Info, Updates, Weitere Plugins, Installation melden
-        add_submenu_page( 'mgd-notification-center', 'Info und Updates', 'Info und Updates', 'manage_options', 'mgd-notification-plugins', array( $this, 'plugins_page' ) );
-    }
-
-    public function plugins_page(): void {
+    /** Eine Seite unter MGD Tools, Reiter Meldungen und Einstellungen */
+    public function page(): void {
         if ( ! current_user_can( 'manage_options' ) ) { wp_die( esc_html__( 'Nicht berechtigt.', 'mgd-notification-center' ), '', array( 'response' => 403 ) ); }
-        $list = $this->recommendations();
-        // parent leer = kein eigener Menüpunkt, Lizenz bleibt aus
-        $dash = \Mgd\NotificationCenter\Kit\Platform\WordPress\Setup::dashboard( MGD_NOTIFICATION_PRODUCT, 'wordpress', MGD_NOTIFICATION_VERSION, 'MGD Notification Center', MGD_Notification_Plugin::$updater, $list, false, '' );
-        if ( null === $dash ) { echo '<div class="wrap"><p>Die Seite konnte gerade nicht geladen werden.</p></div>'; return; }
-        $dash->page();
-    }
-
-    /** Ersatzliste aus plugin-catalog/plugins.json, falls theme.michael-gahn.de nicht antwortet. */
-    private function fallback_plugins(): array {
-        $raw = file_get_contents( MGD_NOTIFICATION_DIR . 'includes/plugin-catalog/plugins.json' );
-        $data = is_string( $raw ) ? json_decode( $raw, true ) : null;
-        $out = array();
-        foreach ( is_array( $data ) ? $data : array() as $row ) {
-            if ( is_array( $row ) && ! empty( $row['slug'] ) ) {
-                $out[] = array( 'slug' => (string) $row['slug'], 'name' => (string) ( $row['name'] ?? '' ), 'description' => (string) ( $row['description'] ?? '' ), 'version' => '' );
-            }
-        }
-        return $out;
+        $tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'notifications'; // phpcs:ignore WordPress.Security.NonceVerification
+        $tab = 'settings' === $tab ? 'settings' : 'notifications';
+        $base = admin_url( 'admin.php?page=mgd-notification-center' );
+        echo '<nav class="nav-tab-wrapper mgd-notification-admin__tabs" aria-label="Notification Center">';
+        echo '<a class="nav-tab' . ( 'notifications' === $tab ? ' nav-tab-active' : '' ) . '" href="' . esc_url( $base ) . '">Meldungen</a>';
+        echo '<a class="nav-tab' . ( 'settings' === $tab ? ' nav-tab-active' : '' ) . '" href="' . esc_url( $base . '&tab=settings' ) . '">Einstellungen</a>';
+        echo '</nav>';
+        'settings' === $tab ? $this->settings_page() : $this->notifications_page();
     }
 
     /** Status mit deutschen Namen */
@@ -73,7 +56,7 @@ final class MGD_Notification_Admin {
         $icon = MGD_Notification_Plugin::settings()['icon'];
         ?>
         <div class="wrap mgd-notification-admin">
-        <header class="mgd-notification-admin__hero"><div class="mgd-notification-admin__hero-icon"><?php echo MGD_Notification_Icons::svg( $icon, 'mgd-notification-admin__hero-svg' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div><div class="mgd-notification-admin__hero-text"><p class="mgd-notification-admin__kicker">MGD · NOTIFICATION CENTER</p><h1><?php esc_html_e( 'Meldungen', 'mgd-notification-center' ); ?></h1><p>Öffentliche Hinweise für alle Besucher und persönliche Nachrichten für einzelne Konten.</p></div><a class="button mgd-notification-admin__hero-button" href="<?php echo esc_url( admin_url( 'admin.php?page=mgd-notification-settings' ) ); ?>">Einstellungen</a></header><hr class="wp-header-end">
+        <header class="mgd-notification-admin__hero"><div class="mgd-notification-admin__hero-icon"><?php echo MGD_Notification_Icons::svg( $icon, 'mgd-notification-admin__hero-svg' ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?></div><div class="mgd-notification-admin__hero-text"><p class="mgd-notification-admin__kicker">MGD · NOTIFICATION CENTER</p><h1><?php esc_html_e( 'Meldungen', 'mgd-notification-center' ); ?></h1><p>Öffentliche Hinweise für alle Besucher und persönliche Nachrichten für einzelne Konten.</p></div><a class="button mgd-notification-admin__hero-button" href="<?php echo esc_url( admin_url( 'admin.php?page=mgd-notification-center&tab=settings' ) ); ?>">Einstellungen</a></header><hr class="wp-header-end">
         <?php if ( ! empty( $_GET['created'] ) || ! empty( $_GET['updated'] ) ) : ?><div class="notice notice-success is-dismissible"><p><?php esc_html_e( 'Meldung gespeichert.', 'mgd-notification-center' ); ?></p></div><?php endif; ?>
         <section class="mgd-notification-admin__stats" aria-label="Meldungsübersicht"><?php foreach ( self::STATUSES as $key => $label ) : ?><div class="mgd-notification-admin__stat mgd-notification-admin__stat--<?php echo esc_attr( $key ); ?>"><span><?php echo esc_html( $label ); ?></span><strong><?php echo (int) ( $counts[ $key ] ?? 0 ); ?></strong></div><?php endforeach; ?></section>
         <div class="mgd-notification-admin__grid">
@@ -148,7 +131,7 @@ final class MGD_Notification_Admin {
                 'visible_limit' => $limit,
                 'icon'          => MGD_Notification_Icons::valid( sanitize_key( wp_unslash( $_POST['icon'] ?? 'bell' ) ) ),
             ) ) );
-            wp_safe_redirect( admin_url( 'admin.php?page=mgd-notification-settings&updated=1' ) ); exit;
+            wp_safe_redirect( admin_url( 'admin.php?page=mgd-notification-center&tab=settings&updated=1' ) ); exit;
         }
         $scope = sanitize_key( wp_unslash( $_POST['scope'] ?? 'public' ) );
         $recipient = absint( $_POST['recipient_id'] ?? 0 );
