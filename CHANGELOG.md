@@ -2,6 +2,10 @@
 
 Alle Änderungen am MGD Notification Center für WordPress, neueste zuerst.
 
+## [2.1.4] - 2026-11-26
+
+- MGD Tools: inaktive MGD-Plugins in der Übersicht, alle Karten in Weitere Plugins (Baukasten 1.16.1).
+
 ## [2.1.3] - 2026-11-26
 
 - MGD Tools: Plugins an- und abschalten, Lizenz je Plugin.
